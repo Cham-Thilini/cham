@@ -1,4 +1,4 @@
-# Cham Madamperuma — Portfolio
+# cham
 
 A responsive personal portfolio for Cham Madamperuma, Senior Full-Stack Software Engineer.
 
@@ -59,7 +59,7 @@ github: 'https://github.com/Cham-Thilini'
 
 The CV is included at:
 
-`public/Cham-Madamperuma-CV.pdf`
+`static/Cham_Madamperuma.pdf`
 
 The website's **Download CV** buttons link to this file.
 
