@@ -6,7 +6,7 @@ export const profile = {
   email: 'eng.cham.net@gmail.com',
   linkedin: 'https://www.linkedin.com/in/chamaramadamperuma/',
   github: 'https://github.com/Cham-Thilini',
-  photo: './profile.jpg',
+  photo: './profile-hero.jpg',
   cv: './Cham-Madamperuma-CV.pdf',
   intro:
     'Senior Full-Stack Software Engineer with 12+ years of commercial experience building enterprise software across fintech, AI-enabled analytics, workflow-heavy platforms and complex optimisation systems.',
