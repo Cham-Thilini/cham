@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // Custom domain deployment at https://chammadamperuma.com
-  base: '/'
+  // GitHub Pages repo site: https://cham.github.io/cham
+  base: '/cham/'
 })
