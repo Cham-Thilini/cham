@@ -9,7 +9,7 @@ export const profile = {
   photo: './profile-hero.jpg',
   cv: './Cham-Madamperuma-CV.pdf',
   intro:
-    'Senior Full-Stack Software Engineer with 12+ years of commercial experience building enterprise software across fintech, AI-enabled analytics, workflow-heavy platforms and complex optimisation systems.',
+    'Senior Full-Stack Software Engineer based in London, with more than 12 years of experience building enterprise applications across SaaS, fintech, education technology, AI-enabled analytics and optimisation.',
 }
 
 export const skillGroups = [

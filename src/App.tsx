@@ -54,11 +54,16 @@ function App() {
           <div className="container hero-grid">
             <div className="hero-copy">
               <div className="kicker">Senior Full-Stack Software Engineer · London, UK</div>
-              <h1>Building scalable software for complex business problems.</h1>
+              <h1>I build software that solves difficult business problems.</h1>
               <p className="hero-subtitle">
                 C#/.NET, Angular, React, Azure, AI-enabled engineering, distributed systems and SaaS architecture.
               </p>
-              <p className="hero-description">{profile.intro}</p>
+              <p className="hero-description">
+                {profile.intro} My work sits at the intersection of software engineering, architecture and product problem-solving.
+              </p>
+              <p className="hero-description hero-quote">
+                I’m most comfortable when the problem is not simply “Build this screen,” but “We have a complicated business problem, several systems involved, security and performance constraints, and we need to turn it into something reliable that people can actually use.”
+              </p>
               <div className="hero-actions">
                 <a className="button" href="#projects">View my work <ArrowRight size={18} /></a>
                 <a className="button button-ghost" href={profile.cv} download><Download size={18} /> Download CV</a>
@@ -96,13 +101,14 @@ function App() {
             </div>
             <div className="prose-card">
               <p>
-                I work across the complete engineering lifecycle: understanding product requirements, designing maintainable architectures,
-                implementing frontend and backend systems, testing, deployment, monitoring and production support.
+                I work across the complete engineering lifecycle—from problem understanding and requirement analysis to architecture,
+                implementation, testing, deployment and production support. My role as a senior engineer is not just to convert tickets into features,
+                but to understand the real business problem and translate it into a resilient system that people can actually use.
               </p>
               <p>
                 My recent work combines enterprise .NET engineering with production AI, real-time streaming, secure application integration,
-                constraint optimisation and cloud delivery. I focus on using technology where it creates practical value while keeping critical
-                security, workflow and data-access decisions under deterministic software control.
+                optimisation and cloud delivery. I think about service boundaries, authentication and authorisation, data ownership,
+                operational constraints and failure scenarios before choosing the technical solution.
               </p>
               <div className="stats">
                 <div><strong>12+</strong><span>Years in software engineering</span></div>
@@ -224,12 +230,12 @@ function App() {
             <h2>How I build software.</h2>
             <div className="philosophy-grid">
               {[
-                ['Business First', 'Understand the real problem before selecting technology.'],
-                ['Keep It Simple', 'Prefer maintainable solutions and avoid unnecessary complexity.'],
-                ['Quality by Design', 'Use testing, reviews, observability and clear architecture.'],
-                ['Design for Change', 'Build systems that can evolve with product needs.'],
-                ['Ownership', 'Take responsibility from discovery through production support.'],
-                ['Team Engineering', 'Share knowledge, mentor developers and raise engineering quality.'],
+                ['Understand before designing', 'Before writing code, I want to understand the business problem, user intent, constraints and failure modes.'],
+                ['Prefer simple systems', 'I like good abstractions, but not complexity for its own sake. Maintainable solutions usually beat clever ones.'],
+                ['Design for failure', 'Production systems fail. I design with timeouts, cancellation, security boundaries, observability and resilience in mind.'],
+                ['Make systems observable', 'Logs, monitoring and clear service boundaries are part of the product, not an afterthought.'],
+                ['Keep learning', 'Technology changes constantly; strong engineering foundations help me adapt without losing judgement.'],
+                ['Technical leadership', 'I enjoy helping engineers make better decisions through architecture, reviews and hands-on engineering leadership.'],
               ].map(([title, text]) => (
                 <article key={title}>
                   <h3>{title}</h3>

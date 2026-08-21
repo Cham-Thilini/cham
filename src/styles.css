@@ -213,6 +213,14 @@ h3 {
   max-width: 760px;
 }
 
+.hero-quote {
+  padding-left: 18px;
+  border-left: 2px solid rgba(123, 210, 255, 0.55);
+  color: #dfe9f5;
+  font-style: italic;
+  max-width: 760px;
+}
+
 .hero-actions, .social-row, .chip-row {
   display: flex;
   flex-wrap: wrap;
