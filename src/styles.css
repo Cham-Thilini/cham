@@ -93,28 +93,41 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .profile-modal {
   position: fixed;
   inset: 0;
-  background: rgba(2, 9, 17, 0.78);
+  background: rgba(2, 9, 17, 0.88);
   display: grid;
   place-items: center;
   z-index: 200;
-  padding: 24px;
+  padding: 20px;
 }
 
 .profile-modal-card {
   position: relative;
-  width: min(90vw, 640px);
-  background: rgba(9, 22, 36, 0.96);
+  width: min(92vw, 860px);
+  max-height: 92vh;
+  background: #020911;
   border: 1px solid rgba(148, 201, 255, 0.28);
-  border-radius: 22px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+}
+
+.profile-modal-card::before {
+  content: '';
+  position: absolute;
+  inset: -28px;
+  background: var(--profile-image) center / cover no-repeat;
+  filter: blur(24px);
+  opacity: .42;
+  transform: scale(1.08);
 }
 
 .profile-modal-card img {
   display: block;
   width: 100%;
-  max-height: 80vh;
-  object-fit: cover;
+  max-height: 92vh;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
 }
 
 .profile-modal-close {

@@ -1,3 +1,6 @@
+import photo from '../../static/profile.jpg'
+import photoLarge from '../../static/LargeProfile.png'
+
 export const profile = {
   name: 'Cham Madamperuma',
   role: 'Senior Full-Stack Software Engineer',
@@ -6,7 +9,8 @@ export const profile = {
   email: 'eng.cham.net@gmail.com',
   linkedin: 'https://www.linkedin.com/in/chamaramadamperuma/',
   github: 'https://github.com/Cham-Thilini',
-  photo: './profile-hero.jpg',
+  photo,
+  photoLarge,
   cv: './Cham-Madamperuma-CV.pdf',
   intro:
     'Senior Full-Stack Software Engineer based in London, with 12+ years of experience building enterprise applications across SaaS, fintech, education technology, AI-enabled analytics and optimisation.',

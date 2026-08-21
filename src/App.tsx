@@ -693,12 +693,12 @@ function App() {
       </main>
 
       {showProfileModal && (
-        <div className="profile-modal" onClick={() => setShowProfileModal(false)}>
-          <div className="profile-modal-card" onClick={(event) => event.stopPropagation()}>
+        <div className="profile-modal" role="dialog" aria-modal="true" aria-label={`${profile.name} profile photo`} onClick={() => setShowProfileModal(false)}>
+          <div className="profile-modal-card" style={{ '--profile-image': `url(${profile.photoLarge})` } as CSSProperties} onClick={(event) => event.stopPropagation()}>
             <button type="button" className="profile-modal-close" onClick={() => setShowProfileModal(false)} aria-label="Close profile photo">
               ×
             </button>
-            <img src={profile.photo} alt={profile.name} />
+            <img src={profile.photoLarge} alt={profile.name} />
           </div>
         </div>
       )}
