@@ -1289,7 +1289,9 @@ footer {
   .hero-grid, .two-col, .architecture-grid { grid-template-columns: 1fr; gap: 48px; }
   .hero { min-height: auto; }
   .hero-visual { aspect-ratio: auto; min-height: 0; padding-bottom: 18px; }
-  .live-architecture-diagram { position: relative; inset: auto; display: grid; gap: 14px; margin: 72px 18px 0; }
+  .visual-header { position: relative; inset: auto; display: grid; gap: 14px; align-items: start; padding: 28px 18px 0; }
+  .visual-status-pill { justify-self: start; }
+  .live-architecture-diagram { position: relative; inset: auto; display: grid; gap: 14px; margin: 20px 18px 0; }
   .live-architecture-diagram > svg { display: none; }
   .live-arch-card { position: relative; left: auto !important; top: auto !important; width: 100%; height: auto; min-height: 176px; }
   .live-card-data { width: 100%; height: auto; overflow: visible; padding: 14px 14px 12px; }
