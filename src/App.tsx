@@ -10,15 +10,16 @@ const navItems = ['about', 'experience', 'skills', 'projects', 'architecture', '
 function App() {
   const [open, setOpen] = useState(false)
   const [showPhone, setShowPhone] = useState(false)
+  const [showProfileModal, setShowProfileModal] = useState(false)
 
   return (
     <div className="app-shell">
       <header className="nav-wrap">
         <nav className="nav container" aria-label="Primary navigation">
-          <a className="brand" href="#home">
+          <button type="button" className="brand" onClick={() => setShowProfileModal(true)} aria-label="View profile photo">
             <img className="brand-mark" src={profile.photo} alt={profile.name} />
             <span>{profile.name}</span>
-          </a>
+          </button>
 
           <div className="desktop-nav">
             {navItems.map((item) => (
@@ -69,8 +70,20 @@ function App() {
               </div>
             </div>
 
-            <div className="hero-visual" aria-label="Profile photo">
-              <img className="profile-photo" src={profile.photo} alt={profile.name} />
+            <div className="hero-visual hero-visual-abstract" aria-label="Architecture overview">
+              <div className="visual-badge">AI + Systems</div>
+              <div className="visual-card visual-main">
+                <span>React / Angular</span>
+                <strong>Product experiences</strong>
+              </div>
+              <div className="visual-card visual-side">
+                <span>.NET APIs</span>
+                <strong>Secure services</strong>
+              </div>
+              <div className="visual-card visual-bottom">
+                <span>Azure + Data</span>
+                <strong>Cloud delivery</strong>
+              </div>
             </div>
           </div>
         </section>
@@ -254,6 +267,17 @@ function App() {
           </div>
         </section>
       </main>
+
+      {showProfileModal && (
+        <div className="profile-modal" onClick={() => setShowProfileModal(false)}>
+          <div className="profile-modal-card" onClick={(event) => event.stopPropagation()}>
+            <button type="button" className="profile-modal-close" onClick={() => setShowProfileModal(false)} aria-label="Close profile photo">
+              ×
+            </button>
+            <img src={profile.photo} alt={profile.name} />
+          </div>
+        </div>
+      )}
 
       <footer>
         <div className="container footer-inner">
