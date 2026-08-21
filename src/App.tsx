@@ -2,16 +2,35 @@ import {
   ArrowRight, Download, Github, Linkedin, Mail, MapPin, Menu, Phone, X,
   BrainCircuit, CloudCog, Code2, Database, Layers3, ShieldCheck, Users
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { experience, profile, projects, skillGroups } from './data/profile'
 
 const navItems = ['home', 'about', 'experience', 'skills', 'projects', 'architecture', 'contact']
+
+const systemStatuses = [
+  '> request received',
+  '> validating JWT context',
+  '> invoking AI workflow',
+  '> applying guardrails',
+  '> querying authorised data',
+  '> streaming response...',
+]
 
 function App() {
   const [open, setOpen] = useState(false)
   const [showPhone, setShowPhone] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [expandedJobs, setExpandedJobs] = useState<Record<string, boolean>>({})
+  const [activeSystem, setActiveSystem] = useState('ai')
+  const [statusIndex, setStatusIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setStatusIndex((current) => (current + 1) % systemStatuses.length)
+    }, 2600)
+
+    return () => window.clearInterval(timer)
+  }, [])
 
   const toggleJob = (company: string) => {
     setExpandedJobs((current) => ({
@@ -82,19 +101,137 @@ function App() {
               </div>
             </div>
 
-            <div className="hero-visual hero-visual-abstract" aria-label="Architecture overview">
-              <div className="visual-badge">AI + Systems</div>
-              <div className="visual-card visual-main">
-                <span>React / Angular</span>
-                <strong>Product experiences</strong>
+            <div className="hero-visual hero-visual-architecture" aria-label="Living AI system architecture">
+              <div className="visual-badge">Live Architecture</div>
+              <div className="visual-subtitle">How I think across the stack</div>
+
+              <div className="architecture-diagram">
+                <svg className="architecture-svg" viewBox="0 0 620 420" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="frontendGlow" x1="0%" x2="100%" y1="0%" y2="0%">
+                      <stop offset="0%" stopColor="#38BDF8" />
+                      <stop offset="100%" stopColor="#2563EB" />
+                    </linearGradient>
+                    <linearGradient id="apiGlow" x1="0%" x2="100%" y1="0%" y2="0%">
+                      <stop offset="0%" stopColor="#A78BFA" />
+                      <stop offset="100%" stopColor="#7C3AED" />
+                    </linearGradient>
+                    <linearGradient id="aiGlow" x1="0%" x2="100%" y1="0%" y2="0%">
+                      <stop offset="0%" stopColor="#C084FC" />
+                      <stop offset="100%" stopColor="#EC4899" />
+                    </linearGradient>
+                    <linearGradient id="dataGlow" x1="0%" x2="100%" y1="0%" y2="0%">
+                      <stop offset="0%" stopColor="#2DD4BF" />
+                      <stop offset="100%" stopColor="#22C55E" />
+                    </linearGradient>
+                    <filter id="softGlow" x="-120%" y="-120%" width="340%" height="340%">
+                      <feGaussianBlur stdDeviation="3.5" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  <path id="frontend-flow" className={`flow-line flow-frontend ${activeSystem === 'frontend' ? 'is-active' : ''}`} d="M170 118 C220 118, 245 118, 292 118" />
+                  <path id="api-flow" className={`flow-line flow-api ${activeSystem === 'api' ? 'is-active' : ''}`} d="M322 150 C322 175, 322 190, 322 210" />
+                  <path id="core-frontend-flow" className={`flow-line flow-frontend ${activeSystem === 'frontend' ? 'is-active' : ''}`} d="M200 150 C245 180, 250 205, 290 220" />
+                  <path id="core-api-flow" className={`flow-line flow-api ${activeSystem === 'api' ? 'is-active' : ''}`} d="M318 240 C318 275, 318 285, 318 298" />
+                  <path id="ai-flow" className={`flow-line flow-ai ${activeSystem === 'ai' ? 'is-active' : ''}`} d="M220 264 C255 260, 270 270, 290 240" />
+                  <path id="data-flow" className={`flow-line flow-data ${activeSystem === 'data' ? 'is-active' : ''}`} d="M340 264 C390 260, 385 270, 420 234" />
+                  <path id="ai-data-flow" className={`flow-line flow-ai ${activeSystem === 'ai' ? 'is-active' : ''}`} d="M275 300 C300 330, 325 330, 420 300" />
+                  <path id="data-bridge" className={`flow-line flow-data ${activeSystem === 'data' ? 'is-active' : ''}`} d="M425 220 C430 200, 462 178, 492 178" />
+
+                  <circle r="4" fill="#83d7ff" filter="url(#softGlow)">
+                    <animateMotion dur="5s" repeatCount="indefinite" rotate="auto">
+                      <mpath href="#frontend-flow" />
+                    </animateMotion>
+                  </circle>
+                  <circle r="4" fill="#8b5cf6" filter="url(#softGlow)">
+                    <animateMotion dur="6s" repeatCount="indefinite" rotate="auto">
+                      <mpath href="#api-flow" />
+                    </animateMotion>
+                  </circle>
+                  <circle r="4" fill="#f472b6" filter="url(#softGlow)">
+                    <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
+                      <mpath href="#ai-data-flow" />
+                    </animateMotion>
+                  </circle>
+                  <circle r="4" fill="#2dd4bf" filter="url(#softGlow)">
+                    <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
+                      <mpath href="#data-flow" />
+                    </animateMotion>
+                  </circle>
+                </svg>
+
+                <button
+                  type="button"
+                  className={`arch-node arch-node-frontend ${activeSystem === 'frontend' ? 'is-active' : ''}`}
+                  onMouseEnter={() => setActiveSystem('frontend')}
+                  onFocus={() => setActiveSystem('frontend')}
+                  onMouseLeave={() => setActiveSystem('ai')}
+                >
+                  <span>Frontend</span>
+                  <strong>React / Angular</strong>
+                  <small>User Experience</small>
+                </button>
+
+                <button
+                  type="button"
+                  className={`arch-node arch-node-api ${activeSystem === 'api' ? 'is-active' : ''}`}
+                  onMouseEnter={() => setActiveSystem('api')}
+                  onFocus={() => setActiveSystem('api')}
+                  onMouseLeave={() => setActiveSystem('ai')}
+                >
+                  <span>.NET / APIs</span>
+                  <strong>Secure Services</strong>
+                  <small>Authentication → APIs</small>
+                </button>
+
+                <div className={`architecture-core ${activeSystem === 'ai' ? 'is-active' : ''}`} aria-label="AI system core">
+                  <div className="core-shell">
+                    <span className="core-spark">✦</span>
+                    <strong>AI SYSTEM</strong>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className={`arch-node arch-node-ai ${activeSystem === 'ai' ? 'is-active' : ''}`}
+                  onMouseEnter={() => setActiveSystem('ai')}
+                  onFocus={() => setActiveSystem('ai')}
+                  onMouseLeave={() => setActiveSystem('ai')}
+                >
+                  <span>AI Workflows</span>
+                  <strong>MCP + LLM</strong>
+                  <small>Guardrails → Analytics</small>
+                </button>
+
+                <button
+                  type="button"
+                  className={`arch-node arch-node-data ${activeSystem === 'data' ? 'is-active' : ''}`}
+                  onMouseEnter={() => setActiveSystem('data')}
+                  onFocus={() => setActiveSystem('data')}
+                  onMouseLeave={() => setActiveSystem('ai')}
+                >
+                  <span>Azure + Data</span>
+                  <strong>SQL / Cloud</strong>
+                  <small>Monitoring → Events</small>
+                </button>
               </div>
-              <div className="visual-card visual-side">
-                <span>.NET APIs</span>
-                <strong>Secure services</strong>
-              </div>
-              <div className="visual-card visual-bottom">
-                <span>Azure + Data</span>
-                <strong>Cloud delivery</strong>
+
+              <div className="status-console" aria-live="polite">
+                <div className="console-header">
+                  <span className="console-dot" />
+                  <span>SYSTEM ONLINE</span>
+                </div>
+                <div className="console-body">
+                  {systemStatuses.map((status, index) => (
+                    <div key={status} className={`console-line ${index === statusIndex ? 'active' : ''}`}>
+                      {status}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
