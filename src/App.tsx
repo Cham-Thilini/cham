@@ -1,20 +1,55 @@
 import {
   ArrowRight, Download, Github, Linkedin, Mail, MapPin, Menu, Phone, X,
-  BrainCircuit, CloudCog, Code2, Database, Layers3, ShieldCheck, Users
+  Brain, BrainCircuit, CheckCircle2, CheckSquare, Cloud, CloudCog, Code2, Component,
+  Database, FileText, Layers, Layers3, Lock, MessageCircle, MousePointerClick,
+  Monitor, RefreshCw, Route, Share2, ShieldAlert, ShieldCheck, Sparkles, Timer, TrendingUp,
+  User, Users, Workflow, Box, ClipboardCheck
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { experience, profile, projects, skillGroups } from './data/profile'
 
 const navItems = ['home', 'about', 'experience', 'skills', 'projects', 'architecture', 'contact']
 
 const systemStatuses = [
-  '> request received',
-  '> validating JWT context',
+  '> request received from user',
+  '> validating JWT & tenant context  ✓',
   '> invoking AI workflow',
-  '> applying guardrails',
-  '> querying authorised data',
-  '> streaming response...',
+  '> applying guardrails & safety checks  ✓',
+  '> querying authorised data sources',
+  '> generating analytics & insights',
+  '> streaming response to client ...',
 ]
+
+type ArchitectureCard = { key: string; left: string; top: string; accent: string; glow: string; eyebrow: string; title: string; subtitle: string; Icon: LucideIcon; items: [LucideIcon, string][] }
+
+const architectureCards: ArchitectureCard[] = [
+  { key: 'frontend', left: '2%', top: '6%', accent: '#4da3ff', glow: '77,163,255', eyebrow: 'FRONTEND', title: 'React / Angular', subtitle: 'User Experience Layer', Icon: Monitor, items: [[Component, 'Components'], [Layers, 'State Management'], [MousePointerClick, 'User Interaction'], [Route, 'Routing']] },
+  { key: 'api', left: '64%', top: '6%', accent: '#a06bff', glow: '160,107,255', eyebrow: '.NET / APIS', title: 'Secure Services', subtitle: 'API Gateway & Services', Icon: ShieldCheck, items: [[Lock, 'JWT Authentication'], [ShieldCheck, 'Authorization'], [Timer, 'Rate Limiting'], [Share2, 'API Endpoints']] },
+  { key: 'ai', left: '2%', top: '44%', accent: '#f24fa0', glow: '242,79,160', eyebrow: 'AI WORKFLOWS', title: 'MCP + LLM', subtitle: 'Intelligent Orchestration', Icon: Brain, items: [[Sparkles, 'Intent Understanding'], [Workflow, 'Workflow Orchestration'], [ShieldAlert, 'Guardrails & Validation'], [MessageCircle, 'Response Generation']] },
+  { key: 'domain', left: '64%', top: '44%', accent: '#5b7cff', glow: '91,124,255', eyebrow: 'DOMAIN SERVICES', title: 'Business Logic', subtitle: 'Enterprise Rules', Icon: Box, items: [[CheckSquare, 'Validation'], [CheckCircle2, 'Business Rules'], [Box, 'Domain Models'], [ClipboardCheck, 'Policy Enforcement']] },
+  { key: 'data', left: '36%', top: '78%', accent: '#33d18f', glow: '51,209,143', eyebrow: 'AZURE + DATA', title: 'Data & Cloud', subtitle: 'Storage, Messaging & Analytics', Icon: Cloud, items: [[Database, 'SQL Database'], [Database, 'Cosmos DB'], [RefreshCw, 'Service Bus / Events'], [FileText, 'Blob Storage / Files']] },
+]
+
+const requestFlow: [LucideIcon, string, string, string][] = [[User, 'User', 'Request', '#4da3ff'], [Lock, 'Auth', 'Validate', '#a06bff'], [Brain, 'AI', 'Process', '#f24fa0'], [Database, 'Data', 'Query', '#33d18f'], [TrendingUp, 'Response', 'Stream', '#4da3ff']]
+
+function ArchitectureCard({ card, activeSystem, setActiveSystem }: { card: ArchitectureCard; activeSystem: string; setActiveSystem: (key: string) => void }) {
+  const Icon = card.Icon
+  return (
+    <article
+      className={`live-arch-card live-card-${card.key} ${activeSystem === card.key ? 'is-active' : ''}`}
+      style={{ left: card.left, top: card.top, '--card-accent': card.accent, '--card-glow': card.glow } as CSSProperties}
+      onMouseEnter={() => setActiveSystem(card.key)}
+      onMouseLeave={() => setActiveSystem('ai')}
+    >
+      <div className="live-card-icon"><Icon size={22} strokeWidth={1.75} /></div>
+      <div className="live-card-eyebrow">{card.eyebrow}</div>
+      <h3>{card.title}</h3>
+      <p>{card.subtitle}</p>
+      <ul>{card.items.map(([ItemIcon, label]) => <li key={label}><ItemIcon size={14} strokeWidth={2} />{label}</li>)}</ul>
+    </article>
+  )
+}
 
 function App() {
   const [open, setOpen] = useState(false)
@@ -22,15 +57,17 @@ function App() {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [expandedJobs, setExpandedJobs] = useState<Record<string, boolean>>({})
   const [activeSystem, setActiveSystem] = useState('ai')
-  const [statusIndex, setStatusIndex] = useState(0)
+  const [visibleLines, setVisibleLines] = useState(0)
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setStatusIndex((current) => (current + 1) % systemStatuses.length)
-    }, 2600)
+    if (visibleLines >= systemStatuses.length) {
+      const reset = window.setTimeout(() => setVisibleLines(0), 1800)
+      return () => window.clearTimeout(reset)
+    }
 
-    return () => window.clearInterval(timer)
-  }, [])
+    const timer = window.setTimeout(() => setVisibleLines((current) => current + 1), 650)
+    return () => window.clearTimeout(timer)
+  }, [visibleLines])
 
   const toggleJob = (company: string) => {
     setExpandedJobs((current) => ({
@@ -78,35 +115,58 @@ function App() {
 
       <main>
         <section id="home" className="hero section">
-          <div className="container hero-grid">
-            <div className="hero-copy">
-              <div className="kicker">Senior Full-Stack Software Engineer · London, UK</div>
-              <h1>Building Scalable Software for Complex Business Problems</h1>
-              <p className="hero-subtitle">Senior Full-Stack Software Engineer</p>
-              <p className="hero-description">
-                Senior software engineer specialising in .NET, C#, React, Angular, Azure, distributed systems and AI-enabled applications.
-                Experienced in designing and delivering scalable enterprise platforms across fintech, education technology, analytics and optimisation domains.
-              </p>
-              <p className="hero-description hero-quote">
-                I’m most comfortable when the problem is not simply “build this screen,” but “solve a complicated business problem with multiple systems, constraints and real operational pressure.”
-              </p>
-              <div className="hero-actions">
-                <a className="button" href="#projects">View my work <ArrowRight size={18} /></a>
-                <a className="button button-ghost" href={profile.cv} download><Download size={18} /> Download CV</a>
-              </div>
-              <div className="social-row">
-                <a href={profile.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub</a>
-                <a href={profile.linkedin} target="_blank" rel="noreferrer"><Linkedin size={18} /> LinkedIn</a>
-                <a href={`mailto:${profile.email}`}><Mail size={18} /> Email</a>
-              </div>
-            </div>
-
+          <div className="container architecture-demo">
             <div className="hero-visual hero-visual-architecture" aria-label="Living AI system architecture">
-              <div className="visual-badge">Live Architecture</div>
-              <div className="visual-subtitle">How I think across the stack</div>
+              <div className="visual-header">
+                <div className="visual-heading">
+                  <div className="visual-title">Live Architecture</div>
+                  <div className="visual-subtitle">How I think across the stack</div>
+                </div>
+                <div className="visual-status-pill"><span className="console-dot" /> System Online</div>
+              </div>
+
+              <div className="live-architecture-diagram">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    {[
+                      ['blue', '#4da3ff'], ['purple', '#a06bff'], ['pink', '#f24fa0'], ['indigo', '#5b7cff'], ['green', '#33d18f'],
+                    ].map(([name, color]) => (
+                      <marker key={name} id={`live-arrow-${name}`} viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.5" markerHeight="2.5" orient="auto">
+                        <path d="M0,0 L10,5 L0,10 z" fill={color} />
+                      </marker>
+                    ))}
+                  </defs>
+                  {[
+                    ['M36,21 L36,32 Q36,36 39.5,36 L43,36', '#4da3ff', 'blue'],
+                    ['M64,21 L64,32 Q64,36 60.5,36 L57,36', '#a06bff', 'purple'],
+                    ['M36,59 L38.5,59 L38.5,52 Q38.5,48 42,48 L44,48', '#f24fa0', 'pink'],
+                    ['M64,59 L61.5,59 L61.5,52 Q61.5,48 58,48 L55,48', '#5b7cff', 'indigo'],
+                    ['M50,78 L50,61', '#33d18f', 'green'],
+                  ].map(([path, color, marker], index) => (
+                    <g key={path}>
+                      <path d={path} fill="none" stroke={color} strokeWidth=".3" opacity=".35" vectorEffect="non-scaling-stroke" />
+                      <path className="live-flow-line" d={path} style={{ color, stroke: color, animationDelay: `${index * 0.34}s` }} markerEnd={`url(#live-arrow-${marker})`} />
+                      <circle r=".9" fill="#fff"><animateMotion begin={`${index * 0.55}s`} dur="2.6s" repeatCount="indefinite" path={path} /></circle>
+                    </g>
+                  ))}
+                </svg>
+
+                {architectureCards.slice(0, 4).map((card) => <ArchitectureCard key={card.key} card={card} activeSystem={activeSystem} setActiveSystem={setActiveSystem} />)}
+
+                <div className={`live-core ${activeSystem === 'ai' ? 'is-active' : ''}`}>
+                  <div className="live-core-ring" />
+                  <div className="live-core-ring live-core-ring-alt" />
+                  <Brain size={30} strokeWidth={1.6} color="#c9b7ff" />
+                  <strong>AI SYSTEM</strong>
+                  <small>Intelligence Core</small>
+                  <span>LLM · MCP · NLQ</span>
+                </div>
+
+                <ArchitectureCard card={architectureCards[4]} activeSystem={activeSystem} setActiveSystem={setActiveSystem} />
+              </div>
 
               <div className="architecture-diagram">
-                <svg className="architecture-svg" viewBox="0 0 620 420" aria-hidden="true">
+                <svg className="architecture-svg" viewBox="0 0 680 420" aria-hidden="true">
                   <defs>
                     <linearGradient id="frontendGlow" x1="0%" x2="100%" y1="0%" y2="0%">
                       <stop offset="0%" stopColor="#38BDF8" />
@@ -133,104 +193,137 @@ function App() {
                     </filter>
                   </defs>
 
-                  <path id="frontend-flow" className={`flow-line flow-frontend ${activeSystem === 'frontend' ? 'is-active' : ''}`} d="M170 118 C220 118, 245 118, 292 118" />
-                  <path id="api-flow" className={`flow-line flow-api ${activeSystem === 'api' ? 'is-active' : ''}`} d="M322 150 C322 175, 322 190, 322 210" />
-                  <path id="core-frontend-flow" className={`flow-line flow-frontend ${activeSystem === 'frontend' ? 'is-active' : ''}`} d="M200 150 C245 180, 250 205, 290 220" />
-                  <path id="core-api-flow" className={`flow-line flow-api ${activeSystem === 'api' ? 'is-active' : ''}`} d="M318 240 C318 275, 318 285, 318 298" />
-                  <path id="ai-flow" className={`flow-line flow-ai ${activeSystem === 'ai' ? 'is-active' : ''}`} d="M220 264 C255 260, 270 270, 290 240" />
-                  <path id="data-flow" className={`flow-line flow-data ${activeSystem === 'data' ? 'is-active' : ''}`} d="M340 264 C390 260, 385 270, 420 234" />
-                  <path id="ai-data-flow" className={`flow-line flow-ai ${activeSystem === 'ai' ? 'is-active' : ''}`} d="M275 300 C300 330, 325 330, 420 300" />
-                  <path id="data-bridge" className={`flow-line flow-data ${activeSystem === 'data' ? 'is-active' : ''}`} d="M425 220 C430 200, 462 178, 492 178" />
+                  <path id="flow-frontend-top" className="flow-line flow-frontend" d="M180 122 C230 122, 250 122, 302 122" />
+                  <path id="flow-api-vertical-1" className="flow-line flow-api" d="M446 146 C446 178, 446 196, 446 214" />
+                  <path id="flow-frontend-mid" className="flow-line flow-frontend" d="M195 150 C240 180, 260 196, 300 214" />
+                  <path id="flow-api-vertical-2" className="flow-line flow-api" d="M446 258 C446 288, 446 302, 446 318" />
+                  <path id="flow-ai-mid" className="flow-line flow-ai" d="M228 260 C250 246, 270 230, 295 230" />
+                  <path id="flow-data-mid" className="flow-line flow-data" d="M440 260 C492 250, 505 244, 535 214" />
+                  <path id="flow-ai-bottom" className="flow-line flow-ai" d="M314 306 C345 345, 390 345, 520 310" />
+                  <path id="flow-data-left" className="flow-line flow-data" d="M220 214 C180 206, 160 188, 120 170" />
 
-                  <circle r="4" fill="#83d7ff" filter="url(#softGlow)">
-                    <animateMotion dur="5s" repeatCount="indefinite" rotate="auto">
-                      <mpath href="#frontend-flow" />
-                    </animateMotion>
-                  </circle>
-                  <circle r="4" fill="#8b5cf6" filter="url(#softGlow)">
-                    <animateMotion dur="6s" repeatCount="indefinite" rotate="auto">
-                      <mpath href="#api-flow" />
-                    </animateMotion>
-                  </circle>
-                  <circle r="4" fill="#f472b6" filter="url(#softGlow)">
-                    <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
-                      <mpath href="#ai-data-flow" />
-                    </animateMotion>
-                  </circle>
-                  <circle r="4" fill="#2dd4bf" filter="url(#softGlow)">
-                    <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
-                      <mpath href="#data-flow" />
-                    </animateMotion>
-                  </circle>
+                  <circle r="4.2" fill="#7dd3fc" filter="url(#softGlow)"><animateMotion dur="3.4s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-frontend-top" /></animateMotion></circle>
+                  <circle r="4" fill="#a78bfa" filter="url(#softGlow)"><animateMotion dur="4.2s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-api-vertical-1" /></animateMotion></circle>
+                  <circle r="4.5" fill="#f472b6" filter="url(#softGlow)"><animateMotion dur="4.6s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-ai-bottom" /></animateMotion></circle>
+                  <circle r="4.2" fill="#2dd4bf" filter="url(#softGlow)"><animateMotion dur="3.8s" repeatCount="indefinite" rotate="auto"><mpath href="#flow-data-mid" /></animateMotion></circle>
                 </svg>
 
-                <button
-                  type="button"
-                  className={`arch-node arch-node-frontend ${activeSystem === 'frontend' ? 'is-active' : ''}`}
-                  onMouseEnter={() => setActiveSystem('frontend')}
-                  onFocus={() => setActiveSystem('frontend')}
-                  onMouseLeave={() => setActiveSystem('ai')}
-                >
-                  <span>Frontend</span>
-                  <strong>React / Angular</strong>
-                  <small>User Experience</small>
-                </button>
+                <div className={`arch-panel arch-panel-frontend ${activeSystem === 'frontend' ? 'is-active' : ''}`} onMouseEnter={() => setActiveSystem('frontend')} onMouseLeave={() => setActiveSystem('ai')}>
+                  <div className="arch-card-head">
+                    <div className="arch-icon arch-icon-blue"><Code2 size={16} /></div>
+                    <div className="arch-label">Frontend</div>
+                  </div>
+                  <h3>React / Angular</h3>
+                  <p>User Experience Layer</p>
+                  <ul>
+                    <li>Components</li>
+                    <li>State Management</li>
+                    <li>User Interaction</li>
+                    <li>Routing</li>
+                  </ul>
+                </div>
 
-                <button
-                  type="button"
-                  className={`arch-node arch-node-api ${activeSystem === 'api' ? 'is-active' : ''}`}
-                  onMouseEnter={() => setActiveSystem('api')}
-                  onFocus={() => setActiveSystem('api')}
-                  onMouseLeave={() => setActiveSystem('ai')}
-                >
-                  <span>.NET / APIs</span>
-                  <strong>Secure Services</strong>
-                  <small>Authentication → APIs</small>
-                </button>
+                <div className={`arch-panel arch-panel-api ${activeSystem === 'api' ? 'is-active' : ''}`} onMouseEnter={() => setActiveSystem('api')} onMouseLeave={() => setActiveSystem('ai')}>
+                  <div className="arch-card-head">
+                    <div className="arch-icon arch-icon-purple"><ShieldCheck size={16} /></div>
+                    <div className="arch-label">.NET / APIs</div>
+                  </div>
+                  <h3>Secure Services</h3>
+                  <p>API Gateway &amp; Services</p>
+                  <ul>
+                    <li>JWT Authentication</li>
+                    <li>Authorization</li>
+                    <li>Rate Limiting</li>
+                    <li>API Endpoints</li>
+                  </ul>
+                </div>
 
-                <div className={`architecture-core ${activeSystem === 'ai' ? 'is-active' : ''}`} aria-label="AI system core">
-                  <div className="core-shell">
+                <div className={`arch-core-panel ${activeSystem === 'ai' ? 'is-active' : ''}`}>
+                  <div className="arch-core-shell">
+                    <div className="arch-core-ring" />
                     <span className="core-spark">✦</span>
-                    <strong>AI SYSTEM</strong>
+                    <h3>AI SYSTEM</h3>
+                    <small>Intelligence Core</small>
+                    <span>LLM · MCP · NLQ</span>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  className={`arch-node arch-node-ai ${activeSystem === 'ai' ? 'is-active' : ''}`}
-                  onMouseEnter={() => setActiveSystem('ai')}
-                  onFocus={() => setActiveSystem('ai')}
-                  onMouseLeave={() => setActiveSystem('ai')}
-                >
-                  <span>AI Workflows</span>
-                  <strong>MCP + LLM</strong>
-                  <small>Guardrails → Analytics</small>
-                </button>
+                <div className={`arch-panel arch-panel-ai ${activeSystem === 'ai' ? 'is-active' : ''}`} onMouseEnter={() => setActiveSystem('ai')} onMouseLeave={() => setActiveSystem('ai')}>
+                  <div className="arch-card-head">
+                    <div className="arch-icon arch-icon-pink"><BrainCircuit size={16} /></div>
+                    <div className="arch-label">AI Workflows</div>
+                  </div>
+                  <h3>MCP + LLM</h3>
+                  <p>Intelligent Orchestration</p>
+                  <ul>
+                    <li>Intent Understanding</li>
+                    <li>Workflow Execution</li>
+                    <li>Guardrails &amp; Validation</li>
+                    <li>Response Generation</li>
+                  </ul>
+                </div>
 
-                <button
-                  type="button"
-                  className={`arch-node arch-node-data ${activeSystem === 'data' ? 'is-active' : ''}`}
-                  onMouseEnter={() => setActiveSystem('data')}
-                  onFocus={() => setActiveSystem('data')}
-                  onMouseLeave={() => setActiveSystem('ai')}
-                >
-                  <span>Azure + Data</span>
-                  <strong>SQL / Cloud</strong>
-                  <small>Monitoring → Events</small>
-                </button>
+                <div className={`arch-panel arch-panel-domain ${activeSystem === 'domain' ? 'is-active' : ''}`} onMouseEnter={() => setActiveSystem('domain')} onMouseLeave={() => setActiveSystem('ai')}>
+                  <div className="arch-card-head">
+                    <div className="arch-icon arch-icon-indigo"><Layers3 size={16} /></div>
+                    <div className="arch-label">Domain Services</div>
+                  </div>
+                  <h3>Business Logic</h3>
+                  <p>Enterprise Rules</p>
+                  <ul>
+                    <li>Validation</li>
+                    <li>Business Rules</li>
+                    <li>Domain Models</li>
+                    <li>Policy Enforcement</li>
+                  </ul>
+                </div>
+
+                <div className={`arch-panel arch-panel-data ${activeSystem === 'data' ? 'is-active' : ''}`} onMouseEnter={() => setActiveSystem('data')} onMouseLeave={() => setActiveSystem('ai')}>
+                  <div className="arch-card-head">
+                    <div className="arch-icon arch-icon-teal"><Database size={16} /></div>
+                    <div className="arch-label">Azure + Data</div>
+                  </div>
+                  <h3>Data &amp; Cloud</h3>
+                  <p>Storage, Messaging &amp; Analytics</p>
+                  <ul>
+                    <li>SQL Database</li>
+                    <li>Cosmos DB</li>
+                    <li>Service Bus / Events</li>
+                    <li>Blob Storage / Files</li>
+                  </ul>
+                </div>
               </div>
 
-              <div className="status-console" aria-live="polite">
-                <div className="console-header">
-                  <span className="console-dot" />
-                  <span>SYSTEM ONLINE</span>
-                </div>
-                <div className="console-body">
-                  {systemStatuses.map((status, index) => (
-                    <div key={status} className={`console-line ${index === statusIndex ? 'active' : ''}`}>
-                      {status}
+              <div className="bottom-panels">
+                <div className="status-console" aria-live="polite">
+                  <div className="console-header-row">
+                    <div className="console-header">
+                      <span className="console-dot" />
+                      <span>System Status</span>
                     </div>
-                  ))}
+                    <span className="console-live">LIVE</span>
+                  </div>
+                  <div className="console-body">
+                    {systemStatuses.slice(0, visibleLines).map((status, index) => (
+                      <div key={status} className={`console-line console-line-${index % 3} ${index === visibleLines - 1 ? 'active' : ''}`}>
+                        <span className="console-arrow">&gt;</span>{status.replace(/^>\s?/, '')}
+                        {index === visibleLines - 1 && <span className="console-cursor" />}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="request-flow-panel">
+                  <div className="request-flow-header">Typical Request Flow</div>
+                  <div className="request-flow-steps">
+                    {requestFlow.map(([Icon, label, sub], index) => (
+                      <div className="flow-step" key={label} style={{ '--flow-delay': `${index * 0.58}s` } as CSSProperties}>
+                        <span className={`flow-icon flow-icon-${index}`}><Icon size={16} /></span>
+                        <small>{label}</small>
+                        <em>{sub}</em>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
