@@ -5,12 +5,20 @@ import {
 import { useState } from 'react'
 import { experience, profile, projects, skillGroups } from './data/profile'
 
-const navItems = ['about', 'experience', 'skills', 'projects', 'architecture', 'contact']
+const navItems = ['home', 'about', 'experience', 'skills', 'projects', 'architecture', 'contact']
 
 function App() {
   const [open, setOpen] = useState(false)
   const [showPhone, setShowPhone] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
+  const [expandedJobs, setExpandedJobs] = useState<Record<string, boolean>>({})
+
+  const toggleJob = (company: string) => {
+    setExpandedJobs((current) => ({
+      ...current,
+      [company]: !current[company],
+    }))
+  }
 
   return (
     <div className="app-shell">
@@ -23,7 +31,7 @@ function App() {
 
           <div className="desktop-nav">
             {navItems.map((item) => (
-              <a href={`#${item}`} key={item}>{item[0].toUpperCase() + item.slice(1)}</a>
+              <a href={`#${item}`} key={item}>{item === 'home' ? 'Home' : item[0].toUpperCase() + item.slice(1)}</a>
             ))}
             <a className="button button-small" href={profile.cv} download>
               <Download size={16} /> Download CV
@@ -39,7 +47,7 @@ function App() {
           <div className="mobile-nav container">
             {navItems.map((item) => (
               <a href={`#${item}`} key={item} onClick={() => setOpen(false)}>
-                {item[0].toUpperCase() + item.slice(1)}
+                {item === 'home' ? 'Home' : item[0].toUpperCase() + item.slice(1)}
               </a>
             ))}
             <a className="button" href={profile.cv} download onClick={() => setOpen(false)}>
@@ -54,12 +62,11 @@ function App() {
           <div className="container hero-grid">
             <div className="hero-copy">
               <div className="kicker">Senior Full-Stack Software Engineer · London, UK</div>
-              <h1>I build software that solves difficult business problems.</h1>
-              <p className="hero-subtitle">
-                C#/.NET, Angular, React, Azure, AI-enabled engineering, distributed systems and SaaS architecture.
-              </p>
+              <h1>Building Scalable Software for Complex Business Problems</h1>
+              <p className="hero-subtitle">Senior Full-Stack Software Engineer</p>
               <p className="hero-description">
-                {profile.intro} I work at the intersection of software engineering, architecture and product problem-solving.
+                Senior software engineer specialising in .NET, C#, React, Angular, Azure, distributed systems and AI-enabled applications.
+                Experienced in designing and delivering scalable enterprise platforms across fintech, education technology, analytics and optimisation domains.
               </p>
               <p className="hero-description hero-quote">
                 I’m most comfortable when the problem is not simply “build this screen,” but “solve a complicated business problem with multiple systems, constraints and real operational pressure.”
@@ -121,29 +128,85 @@ function App() {
 
         <section id="experience" className="section section-alt">
           <div className="container">
-            <span className="section-label">Experience</span>
-            <h2>Enterprise software, technical leadership and modernisation.</h2>
-            <div className="timeline">
-              {experience.map((job) => (
-                <article className="timeline-item" key={`${job.company}-${job.period}`}>
-                  <div className="timeline-rail"><span /></div>
-                  <div className="timeline-content">
-                    <div className="job-head">
-                      <div>
-                        <h3>{job.role}</h3>
-                        <p>{job.company}</p>
+            <span className="section-label">Professional Experience</span>
+            <h2>Enterprise Software, Technical Leadership &amp; Modernisation</h2>
+            <p className="experience-intro">
+              My experience spans enterprise SaaS, fintech, cloud platforms, application modernisation, optimisation and production AI engineering.
+            </p>
+            <p className="experience-intro">
+              Across these environments, my role has progressively expanded from implementing individual application features to owning problems across multiple layers of a system—understanding business requirements, designing solutions, building frontend and backend components, integrating services, supporting production systems and helping other engineers make effective technical decisions.
+            </p>
+
+            <div className="experience-story">
+              {experience.map((job) => {
+                const fullItems = job.sections.flatMap((section) =>
+                  section.items ?? (section.paragraph ? [section.paragraph] : []),
+                )
+                const visibleItems = expandedJobs[job.company] ? fullItems : fullItems.slice(0, 3)
+                const isExpanded = Boolean(expandedJobs[job.company])
+
+                return (
+                  <article className="experience-entry" key={`${job.company}-${job.period}`}>
+                    <h3 className="entry-company">{job.company}</h3>
+                    <h4 className="entry-role">{job.role}</h4>
+                    <p className="entry-period">{job.period}</p>
+                    {job.intro && <p className="entry-intro">{job.intro}</p>}
+
+                    {isExpanded ? (
+                      <div className="expanded-experience-block">
+                        {job.sections.map((section) => (
+                          <div className="entry-section" key={`${job.company}-${section.title}`}>
+                            <h5>{section.title}</h5>
+                            {section.paragraph ? (
+                              <p>{section.paragraph}</p>
+                            ) : (
+                              <ul>
+                                {section.items?.map((item) => <li key={`${job.company}-${section.title}-${item}`}>{item}</li>)}
+                              </ul>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                      <span className="period">{job.period}</span>
-                    </div>
-                    <ul>
-                      {job.points.map((point) => <li key={point}>{point}</li>)}
-                    </ul>
-                    <div className="chip-row">
-                      {job.tech.map((tech) => <span className="chip" key={tech}>{tech}</span>)}
-                    </div>
-                  </div>
-                </article>
-              ))}
+                    ) : (
+                      <ul className="experience-highlights">
+                        {visibleItems.map((item) => <li key={`${job.company}-${item}`}>{item}</li>)}
+                      </ul>
+                    )}
+
+                    {fullItems.length > 3 && (
+                      <button
+                        type="button"
+                        className="toggle-details"
+                        onClick={() => toggleJob(job.company)}
+                        aria-expanded={isExpanded}
+                      >
+                        {isExpanded ? 'Show less' : 'Show more'}
+                      </button>
+                    )}
+                  </article>
+                )
+              })}
+
+              <div className="entry-section progression-block">
+                <h5>Career Progression</h5>
+                <p>
+                  My career has not simply been a progression through different frameworks. It has been a progression in engineering responsibility.
+                </p>
+                <div className="progression-steps" aria-label="Career progression">
+                  <div>Full-Stack Engineering<br /><span>.NET · Angular · APIs · Financial Platforms</span></div>
+                  <div>Integration &amp; Architecture<br /><span>Authentication · External APIs · Cloud Integration · SOLID</span></div>
+                  <div>Modernisation &amp; Cloud<br /><span>React · Azure Functions · CI/CD · Infrastructure as Code · Observability</span></div>
+                  <div>Distributed Systems<br /><span>Angular Architecture · Messaging · Multi-Cloud · Backend Integration</span></div>
+                  <div>Technical Leadership<br /><span>Architecture · Team Leadership · TDD · Azure · Stakeholders · Production Ownership</span></div>
+                  <div>Advanced Enterprise Engineering<br /><span>Production AI · MCP · Real-Time Streaming · Secure AI Integration · Natural-Language Analytics · Constraint Optimisation</span></div>
+                </div>
+                <p>
+                  Today, that experience allows me to move comfortably between detailed implementation and higher-level engineering questions. I can discuss a React state-management problem, investigate a .NET API, reason about SQL behaviour, design communication between distributed services, review an authentication boundary, model an optimisation constraint or discuss how an AI workflow should be controlled.
+                </p>
+                <p>
+                  But the technology itself is not the end goal. The goal is to build software that solves the business problem, works reliably in production, remains understandable to the engineering team and can continue evolving as the product changes.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -227,21 +290,34 @@ function App() {
         <section className="section philosophy">
           <div className="container">
             <span className="section-label">Engineering Philosophy</span>
-            <h2>How I build software.</h2>
+            <h2>How I Build Software</h2>
             <div className="philosophy-grid">
               {[
-                ['Understand before designing', 'Before writing code, I want to understand the business problem, user intent, constraints and failure modes.'],
-                ['Prefer simple systems', 'I value clean abstractions, but not complexity for its own sake. Maintainable systems usually outperform clever ones.'],
-                ['Design for failure', 'Production systems fail. I design with timeouts, cancellation, security boundaries, observability and resilience in mind.'],
-                ['Make systems observable', 'Monitoring, logging and clear service boundaries are part of the product, not an afterthought.'],
-                ['Keep learning', 'Technology changes constantly; strong engineering foundations help me adapt without losing judgement.'],
-                ['Technical leadership', 'I enjoy helping teams make better decisions through architecture, reviews and hands-on engineering leadership.'],
+                ['Business First', 'Understand the actual problem before selecting technology.'],
+                ['Keep It Simple', 'Prefer maintainable solutions and avoid unnecessary complexity.'],
+                ['Quality by Design', 'Use automated testing, code reviews, observability and clear architecture.'],
+                ['Design for Change', 'Build systems that can evolve as business requirements change.'],
+                ['Ownership', 'Take responsibility from requirement discovery through production support.'],
+                ['Team Engineering', 'Share knowledge, mentor developers and improve engineering practices.'],
               ].map(([title, text]) => (
                 <article key={title}>
                   <h3>{title}</h3>
                   <p>{text}</p>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section section-alt">
+          <div className="container">
+            <span className="section-label">Career Statistics</span>
+            <h2>Senior engineering depth across software, architecture and cloud delivery.</h2>
+            <div className="stats career-stats">
+              <div><strong>12+</strong><span>Years in software engineering</span></div>
+              <div><strong>9+</strong><span>Years in C# / .NET</span></div>
+              <div><strong>Full Stack</strong><span>Frontend → Backend → Cloud</span></div>
+              <div><strong>Cloud</strong><span>Azure & modern DevOps</span></div>
             </div>
           </div>
         </section>
@@ -288,7 +364,14 @@ function App() {
       <footer>
         <div className="container footer-inner">
           <span>© 2026 {profile.name}. All rights reserved.</span>
-          <span>Built with React, TypeScript & Vite · GitHub Pages ready.</span>
+          <div className="footer-links" aria-label="Social links">
+            <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+            <span>•</span>
+            <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+            <span>•</span>
+            <a href={`mailto:${profile.email}`}>Email</a>
+          </div>
+          <span>Built with modern web technologies and hosted on GitHub Pages.</span>
         </div>
       </footer>
     </div>

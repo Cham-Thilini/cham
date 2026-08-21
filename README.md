@@ -1,78 +1,91 @@
-# cham
+# Cham Madamperuma Portfolio
 
-A responsive personal portfolio for Cham Madamperuma, Senior Full-Stack Software Engineer.
+A premium, responsive portfolio for a senior full-stack software engineer, built with React, TypeScript and Vite for GitHub Pages hosting.
 
-## Stack
+## Prerequisites
 
-- React 18
-- TypeScript
-- Vite
-- Lucide icons
-- CSS only for layout and animation
-- GitHub Actions for GitHub Pages deployment
+- Node.js 18+
+- npm
+- A GitHub account
+
+## Installation
+
+```bash
+npm install
+```
 
 ## Local development
 
 ```bash
-npm install
 npm run dev
+```
+
+Then open the local address shown in the terminal, typically:
+
+```text
+http://localhost:5173/
 ```
 
 ## Production build
 
 ```bash
 npm run build
+```
+
+To preview the production build locally:
+
+```bash
 npm run preview
 ```
 
-## Publish on GitHub Pages
+## GitHub repository setup
 
-1. Create a new GitHub repository, for example `cham-portfolio`.
-2. Copy this project into the repository.
-3. Commit and push to the `main` branch.
-4. In GitHub, open **Settings → Pages**.
-5. Under **Build and deployment**, set **Source** to **GitHub Actions**.
-6. Push a new commit if needed. The included workflow will build and deploy the site.
-7. When deployment finishes, GitHub will show the public URL.
+1. Create a repository on GitHub, for example `cham`.
+2. Push this project to the repository's `main` branch.
+3. Ensure the project contains the `public/` directory for static assets and `vite.config.ts` configured for GitHub Pages.
 
-The Vite configuration uses `base: './'`, so it works for a standard GitHub Pages project site without needing to hard-code the repository name.
+## Enabling GitHub Pages
 
-## Update profile links
+1. In GitHub, open the repository.
+2. Go to **Settings** → **Pages**.
+3. Under **Build and deployment**, choose **GitHub Actions**.
+4. The included workflow in `.github/workflows/deploy.yml` will build and publish the app automatically.
 
-Open:
+## GitHub Actions deployment
 
-`src/data/profile.ts`
+The project includes a deployment workflow:
 
-Replace the LinkedIn URL if needed:
-
-```ts
-linkedin: 'https://www.linkedin.com/in/YOUR-PROFILE/'
+```yaml
+.github/workflows/deploy.yml
 ```
 
-The GitHub profile is currently configured as:
+This workflow:
 
-```ts
-github: 'https://github.com/Cham-Thilini'
-```
+- installs dependencies
+- runs `npm run build`
+- uploads the `dist/` output
+- deploys it to the GitHub Pages environment
 
-## CV
+## Custom domain later
 
-The CV is included at:
+To add a custom domain such as `chammadamperuma.com` later:
 
-`static/Cham_Madamperuma.pdf`
-
-The website's **Download CV** buttons link to this file.
-
-## Custom domain
-
-After the site is live:
-
-1. Buy or configure your domain.
-2. Open **Settings → Pages → Custom domain**.
-3. Enter your domain.
-4. Configure the DNS records requested by GitHub.
+1. Buy the domain from a registrar.
+2. Open **Settings** → **Pages** in GitHub.
+3. Add the custom domain.
+4. Configure the DNS records provided by GitHub.
 5. Enable **Enforce HTTPS** after DNS verification.
 
-## Content source
+## Content and assets
 
-Portfolio content was prepared from the supplied CV. No additional employer names, qualifications, awards, or performance metrics were invented.
+Update portfolio details in:
+
+- `src/data/profile.ts`
+
+Replace placeholders such as LinkedIn, GitHub, email, CV path and photo URLs when needed.
+
+The main static files are kept in the `public/` folder and are GitHub Pages compatible.
+
+## Notes
+
+This project is designed to work as a static website only. There is no backend, database or API server requirement.
