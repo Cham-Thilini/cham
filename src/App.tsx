@@ -59,10 +59,10 @@ function App() {
                 C#/.NET, Angular, React, Azure, AI-enabled engineering, distributed systems and SaaS architecture.
               </p>
               <p className="hero-description">
-                {profile.intro} My work sits at the intersection of software engineering, architecture and product problem-solving.
+                {profile.intro} I work at the intersection of software engineering, architecture and product problem-solving.
               </p>
               <p className="hero-description hero-quote">
-                I’m most comfortable when the problem is not simply “Build this screen,” but “We have a complicated business problem, several systems involved, security and performance constraints, and we need to turn it into something reliable that people can actually use.”
+                I’m most comfortable when the problem is not simply “build this screen,” but “solve a complicated business problem with multiple systems, constraints and real operational pressure.”
               </p>
               <div className="hero-actions">
                 <a className="button" href="#projects">View my work <ArrowRight size={18} /></a>
@@ -101,14 +101,14 @@ function App() {
             </div>
             <div className="prose-card">
               <p>
-                I work across the complete engineering lifecycle—from problem understanding and requirement analysis to architecture,
-                implementation, testing, deployment and production support. My role as a senior engineer is not just to convert tickets into features,
-                but to understand the real business problem and translate it into a resilient system that people can actually use.
+                I work across the complete engineering lifecycle—from problem understanding and architecture through implementation,
+                testing, deployment and production support. My role as a senior engineer is not simply to turn tickets into features,
+                but to understand the real business problem and translate it into a resilient system people can trust.
               </p>
               <p>
                 My recent work combines enterprise .NET engineering with production AI, real-time streaming, secure application integration,
-                optimisation and cloud delivery. I think about service boundaries, authentication and authorisation, data ownership,
-                operational constraints and failure scenarios before choosing the technical solution.
+                optimisation and cloud delivery. I think carefully about service boundaries, authentication, authorisation, data ownership,
+                operational constraints and failure modes before choosing the technical solution.
               </p>
               <div className="stats">
                 <div><strong>12+</strong><span>Years in software engineering</span></div>
@@ -231,11 +231,11 @@ function App() {
             <div className="philosophy-grid">
               {[
                 ['Understand before designing', 'Before writing code, I want to understand the business problem, user intent, constraints and failure modes.'],
-                ['Prefer simple systems', 'I like good abstractions, but not complexity for its own sake. Maintainable solutions usually beat clever ones.'],
+                ['Prefer simple systems', 'I value clean abstractions, but not complexity for its own sake. Maintainable systems usually outperform clever ones.'],
                 ['Design for failure', 'Production systems fail. I design with timeouts, cancellation, security boundaries, observability and resilience in mind.'],
-                ['Make systems observable', 'Logs, monitoring and clear service boundaries are part of the product, not an afterthought.'],
+                ['Make systems observable', 'Monitoring, logging and clear service boundaries are part of the product, not an afterthought.'],
                 ['Keep learning', 'Technology changes constantly; strong engineering foundations help me adapt without losing judgement.'],
-                ['Technical leadership', 'I enjoy helping engineers make better decisions through architecture, reviews and hands-on engineering leadership.'],
+                ['Technical leadership', 'I enjoy helping teams make better decisions through architecture, reviews and hands-on engineering leadership.'],
               ].map(([title, text]) => (
                 <article key={title}>
                   <h3>{title}</h3>
