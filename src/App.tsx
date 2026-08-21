@@ -3,13 +3,125 @@ import {
   Brain, BrainCircuit, CheckCircle2, CheckSquare, Cloud, CloudCog, Code2, Component,
   Database, FileText, Layers, Layers3, Lock, MessageCircle, MousePointerClick,
   Monitor, RefreshCw, Route, Share2, ShieldAlert, ShieldCheck, Sparkles, Timer, TrendingUp,
-  User, Users, Workflow, Box, ClipboardCheck
+  User, Users, Workflow, Box, ClipboardCheck, Languages
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useState, type CSSProperties } from 'react'
 import { experience, profile, projects, skillGroups } from './data/profile'
 
 const navItems = ['home', 'about', 'experience', 'skills', 'projects', 'architecture', 'contact']
+
+const copy = {
+  en: {
+    nav: { home: 'Home', about: 'About', experience: 'Experience', skills: 'Skills', projects: 'Projects', architecture: 'Architecture', contact: 'Contact' },
+    download: 'Download CV',
+    liveArchitecture: 'Live Architecture',
+    stackSubtitle: 'How I think across the stack',
+    systemOnline: 'System Online',
+    systemStatus: 'System Status',
+    requestFlow: 'Typical Request Flow',
+    about: 'About',
+    aboutTitle: 'Full-stack ownership, from product problem to production.',
+    experience: 'Professional Experience',
+    experienceTitle: 'Enterprise Software, Technical Leadership & Modernisation',
+    skills: 'Technical Skills',
+    skillsTitle: 'Strong Microsoft engineering foundation with modern AI and cloud capability.',
+    projects: 'Featured Work',
+    projectsTitle: 'Selected engineering problems and systems.',
+    architecture: 'Architecture',
+    architectureTitle: 'I design beyond the UI.',
+    philosophy: 'Engineering Philosophy',
+    philosophyTitle: 'How I Build Software',
+    statistics: 'Career Statistics',
+    statisticsTitle: 'Senior engineering depth across software, architecture and cloud delivery.',
+    contact: 'Contact',
+    contactTitle: 'Let’s build something meaningful.',
+    email: 'Email me',
+    call: 'Call me',
+    experienceIntro: 'My experience spans enterprise SaaS, fintech, cloud platforms, application modernisation, optimisation and production AI engineering.',
+    experienceIntroTwo: 'Across these environments, my role has progressively expanded from implementing individual application features to owning problems across multiple layers of a system.',
+    showLess: 'Show less',
+    showMore: 'Show more',
+    progression: 'Career Progression',
+    progressionText: 'My career has not simply been a progression through different frameworks. It has been a progression in engineering responsibility.',
+    architectureLead: 'My work spans browser clients, secure .NET APIs, distributed services, cloud infrastructure, AI workflows, data platforms and production operations.',
+    principles: [['Secure by design', 'JWT validation, scope enforcement, guardrails'], ['Team engineering', 'Reviews, mentoring, technical decisions'], ['Data aware', 'SQL Server, analytics, safe data access']],
+    philosophyItems: [['Business First', 'Understand the actual problem before selecting technology.'], ['Keep It Simple', 'Prefer maintainable solutions and avoid unnecessary complexity.'], ['Quality by Design', 'Use automated testing, code reviews, observability and clear architecture.'], ['Design for Change', 'Build systems that can evolve as business requirements change.'], ['Ownership', 'Take responsibility from requirement discovery through production support.'], ['Team Engineering', 'Share knowledge, mentor developers and improve engineering practices.']],
+    statsLabels: ['Years in software engineering', 'Years in C# / .NET', 'Frontend → Backend → Cloud', 'Azure & modern DevOps'],
+    contactText: 'I’m interested in senior full-stack and technical leadership opportunities where I can contribute to challenging products, architecture and engineering teams.',
+    aboutParagraphs: ['I work across the complete engineering lifecycle—from problem understanding and architecture through implementation, testing, deployment and production support. My role as a senior engineer is not simply to turn tickets into features, but to understand the real business problem and translate it into a resilient system people can trust.', 'My recent work combines enterprise .NET engineering with production AI, real-time streaming, secure application integration, optimisation and cloud delivery. I think carefully about service boundaries, authentication, authorisation, data ownership, operational constraints and failure modes before choosing the technical solution.'],
+  },
+  de: {
+    nav: { home: 'Startseite', about: 'Über mich', experience: 'Erfahrung', skills: 'Kompetenzen', projects: 'Projekte', architecture: 'Architektur', contact: 'Kontakt' },
+    download: 'Lebenslauf herunterladen',
+    liveArchitecture: 'Live-Architektur',
+    stackSubtitle: 'So denke ich über den gesamten Stack',
+    systemOnline: 'System online',
+    systemStatus: 'Systemstatus',
+    requestFlow: 'Typischer Anfrageablauf',
+    about: 'Über mich',
+    aboutTitle: 'Verantwortung für den gesamten Stack, vom Produktproblem bis zum produktiven Betrieb.',
+    experience: 'Berufserfahrung',
+    experienceTitle: 'Unternehmenssoftware, technische Führung und Modernisierung',
+    skills: 'Technische Kompetenzen',
+    skillsTitle: 'Starke Microsoft-Engineering-Basis mit modernen KI- und Cloud-Kompetenzen.',
+    projects: 'Ausgewählte Arbeiten',
+    projectsTitle: 'Ausgewählte technische Herausforderungen und Systeme.',
+    architecture: 'Architektur',
+    architectureTitle: 'Ich entwickle über die Benutzeroberfläche hinaus.',
+    philosophy: 'Engineering-Philosophie',
+    philosophyTitle: 'So entwickle ich Software',
+    statistics: 'Karrierestatistik',
+    statisticsTitle: 'Langjährige Erfahrung in Softwareentwicklung, Architektur und Cloud-Bereitstellung.',
+    contact: 'Kontakt',
+    contactTitle: 'Lassen Sie uns etwas Bedeutungsvolles entwickeln.',
+    email: 'E-Mail senden',
+    call: 'Anrufen',
+    experienceIntro: 'Meine Erfahrung umfasst Enterprise-SaaS, Fintech, Cloud-Plattformen, Anwendungsmodernisierung, Optimierung und produktive KI-Entwicklung.',
+    experienceIntroTwo: 'In diesen Umgebungen hat sich meine Rolle von der Umsetzung einzelner Funktionen zur Verantwortung für Probleme über mehrere Systemebenen hinweg entwickelt.',
+    showLess: 'Weniger anzeigen',
+    showMore: 'Mehr anzeigen',
+    progression: 'Karriereentwicklung',
+    progressionText: 'Meine Karriere war nicht nur eine Entwicklung durch verschiedene Frameworks, sondern vor allem eine Entwicklung technischer Verantwortung.',
+    architectureLead: 'Meine Arbeit umfasst Browser-Clients, sichere .NET-APIs, verteilte Services, Cloud-Infrastruktur, KI-Workflows, Datenplattformen und produktiven Betrieb.',
+    principles: [['Sicherheit by Design', 'JWT-Validierung, Bereichsprüfung und Schutzmechanismen'], ['Engineering im Team', 'Reviews, Mentoring und technische Entscheidungen'], ['Datenbewusst', 'SQL Server, Analysen und sicherer Datenzugriff']],
+    philosophyItems: [['Geschäft zuerst', 'Das eigentliche Problem verstehen, bevor Technologie ausgewählt wird.'], ['Einfach halten', 'Wartbare Lösungen bevorzugen und unnötige Komplexität vermeiden.'], ['Qualität by Design', 'Automatisierte Tests, Code-Reviews, Überwachung und klare Architektur einsetzen.'], ['Für Veränderung entwickeln', 'Systeme so bauen, dass sie sich mit den Anforderungen weiterentwickeln.'], ['Verantwortung', 'Von der Anforderungsermittlung bis zum produktiven Betrieb Verantwortung übernehmen.'], ['Engineering im Team', 'Wissen teilen, Entwickler unterstützen und technische Praktiken verbessern.']],
+    statsLabels: ['Jahre Softwareentwicklung', 'Jahre C# / .NET', 'Frontend → Backend → Cloud', 'Azure & moderne DevOps'],
+    contactText: 'Ich interessiere mich für leitende Full-Stack- und technische Führungsrollen, in denen ich zu anspruchsvollen Produkten, Architekturen und Engineering-Teams beitragen kann.',
+    aboutParagraphs: ['Ich arbeite über den gesamten Entwicklungszyklus hinweg – vom Verständnis des Problems und der Architektur über Implementierung und Tests bis hin zu Bereitstellung und produktivem Betrieb. Als Senior Engineer setze ich nicht einfach Tickets in Funktionen um, sondern verstehe das eigentliche Geschäftsproblem und übersetze es in ein belastbares System, dem Menschen vertrauen können.', 'Meine aktuelle Arbeit verbindet Enterprise-.NET-Entwicklung mit produktiver KI, Echtzeit-Streaming, sicherer Anwendungsintegration, Optimierung und Cloud-Bereitstellung. Vor der Wahl einer technischen Lösung prüfe ich sorgfältig Servicegrenzen, Authentifizierung, Autorisierung, Datenverantwortung, betriebliche Einschränkungen und Fehlerszenarien.'],
+  },
+} as const
+
+const germanExperiencePreview: Record<string, { role: string; period: string; intro: string; highlights: string[] }> = {
+  Bromcom: { role: 'Senior Full-Stack-Softwareentwickler', period: 'Oktober 2024 – Heute | London', intro: 'Bei Bromcom arbeite ich an einem etablierten Enterprise-Management-Informationssystem. Neue Funktionen müssen mit bestehenden Geschäftsprozessen, Sicherheitsgrenzen, der Anwendungsarchitektur und großen Mengen operativer Daten zusammenspielen. Meine Aufgaben umfassen klassische Full-Stack-Entwicklung, komplexe Stundenplanoptimierung und zunehmend produktive KI-Entwicklung.', highlights: ['Eine produktive KI-Assistenz entwickelt und in das bestehende Enterprise-MIS integriert, statt KI als isolierten Proof of Concept zu entwickeln.', 'Über die vollständige KI-Anwendungsarchitektur gearbeitet, einschließlich React-Oberfläche, .NET-API-Gateway, MCP-Workflow-Service und Analytics-on-Demand-Services.', 'Die Integration zwischen Host-Anwendung und eingebetteter React-KI-Erfahrung über definierte postMessage-Verträge entworfen, damit Authentifizierung und Anwendungskontext sicher übertragen werden.'] },
+  'MGT Fintec Synergies Ltd': { role: 'Teamleiter / Senior Full-Stack-Entwickler', period: 'Dezember 2022 – September 2024 | London', intro: 'Bei MGT Fintec habe ich praktische Full-Stack-Entwicklung mit Teamführung und Lieferverantwortung in einem Fintech-Umfeld verbunden. Dabei musste ich berücksichtigen, wie technische Entscheidungen Team, Produkt, Veröffentlichungsprozess und langfristige Wartbarkeit beeinflussen.', highlights: ['Skalierbare .NET-Core-APIs für Finanz- und operative Anwendungen konzipiert und entwickelt.', 'Angular-Anwendungen für die Arbeit mit Finanzdaten und Geschäftsprozessen entwickelt.', 'Über Backend-APIs, Frontend-Anwendungen und Integrationen hinweg gearbeitet.'] },
+  'BlackSwan Technologies': { role: 'Senior Frontend-Entwickler', period: 'Juli 2021 – Dezember 2022', intro: 'Bei BlackSwan Technologies lag mein Schwerpunkt auf Enterprise-Frontend-Architektur, mit regelmäßigen Berührungspunkten zu Cloud-Integration, Messaging, Backend-Services und KI-gestützten Analysen. Dadurch habe ich verstanden, wie moderne Frontends als Teil eines größeren verteilten Systems arbeiten.', highlights: ['Wiederverwendbare Angular-Servicebibliotheken für Enterprise-Anwendungen entwickelt.', 'Wiederverwendbare Authentifizierungsfunktionen entworfen, statt Authentifizierungslogik in mehreren Bereichen zu duplizieren.', 'Authentifizierungsabläufe über Azure-, AWS- und GCP-Umgebungen hinweg umgesetzt.'] },
+  InEight: { role: 'Senior Frontend-Entwickler', period: 'Februar 2020 – Juni 2021', intro: 'Bei InEight habe ich etablierte Enterprise-Anwendungen modernisiert und die zugehörige Cloud-Bereitstellung sowie Produktionsüberwachung verbessert. Die Rolle vermittelte mir wertvolle Erfahrung darin, die Technologie unter einem bestehenden Produkt zu verändern, ohne den Produktbetrieb unnötig zu beeinträchtigen.', highlights: ['Die Migration von etablierten JavaScript-/Kendo-UI-Anwendungen zu React geleitet.', 'Moderne React-Funktionen als Teil der Migration entwickelt.', 'Mit bestehendem Anwendungsverhalten gearbeitet, das während der Modernisierung funktionsfähig bleiben musste.'] },
+  QualitApps: { role: 'Senior Softwareentwickler', period: 'November 2018 – Januar 2020', intro: 'Bei QualitApps habe ich als Full-Stack-Entwickler Enterprise-Webplattformen mit .NET Core und Angular entwickelt. Diese Rolle hat die C#/.NET- und moderne Web-Engineering-Basis gestärkt, die weiterhin einen wichtigen Teil meines technischen Profils bildet.', highlights: ['Skalierbare .NET-Core-APIs für Enterprise-Anwendungen entwickelt.', 'REST-basierte Anwendungsfunktionen für Frontend- und Integrationsanforderungen entwickelt.', 'Geschäftsfunktionen über Backend-Services hinweg umgesetzt.'] },
+  'Siyobit Holdings': { role: 'Full-Stack-Teamleiter / Softwareentwickler', period: '2014 – 2018', intro: 'Bei Siyobit habe ich die Grundlage für meine Full-Stack-Entwicklung und technische Führung gelegt. Ich arbeitete an Finanz- und Handelsplattformen, bei denen Zuverlässigkeit und kontrollierte Weiterentwicklung geschäftskritisch waren.', highlights: ['.NET-Anwendungen für Finanz- und Handelsplattformen entwickelt.', 'Angular-Anwendungen für moderne webbasierte Funktionen entwickelt.', 'RESTful APIs entworfen und implementiert.'] },
+}
+
+const germanProjects: Record<string, { eyebrow: string; title: string; description: string }> = {
+  'Production AI Assistant & Workflow Platform': { eyebrow: 'KI-Engineering', title: 'Produktive KI-Assistenz und Workflow-Plattform', description: 'Enterprise-KI mit React-Client, .NET-Gateway, MCP-Workflow-Service, Echtzeit-SSE-Streaming und natürlichsprachlicher Analytik – bei deterministischer Authentifizierung, Datenbereichsprüfung und Workflow-Steuerung.' },
+  'Enterprise Timetable Optimisation': { eyebrow: 'Constraint-Optimierung', title: 'Optimierung von Enterprise-Stundenplänen', description: 'Automatische Stundenplanerstellung mit Google OR-Tools CP-SAT, die komplexe Anforderungen für Mitarbeitende, Räume, Fächer, Sitzungen und Verfügbarkeiten in wartbare Optimierungslogik übersetzt.' },
+  'FinTech Full-Stack Platforms': { eyebrow: 'Technische Führung', title: 'Full-Stack-Fintech-Plattformen', description: 'Finanztechnische Anwendungen mit .NET Core, Angular, Azure, CI/CD und sauberen Engineering-Praktiken entwickelt und verantwortet – von Architektur und Lieferung bis zur Zusammenarbeit mit Stakeholdern.' },
+  'Martian Robots': { eyebrow: 'Engineering-Herausforderung', title: 'Mars-Roboter', description: 'Eine .NET-8-Implementierung des Problems der Mars-Roboter mit klarem Domänenmodell, befehlsbasierter Steuerung, Geruchsspeicherung und automatisierten Tests.' },
+}
+
+const germanProjectHighlights: Record<string, string[]> = {
+  'Production AI Assistant & Workflow Platform': ['MCP-Orchestrierung', 'JWT / Mandantenbereich', 'SSE-Streaming', 'NL-zu-SQL-Analytik', 'Prompt- und SQL-Schutzmechanismen'],
+  'Enterprise Timetable Optimisation': ['C#/.NET', 'Google OR-Tools', 'CP-SAT', 'Angular', 'SQL Server'],
+  'FinTech Full-Stack Platforms': ['.NET Core', 'Angular', 'Azure', 'TDD', 'Teamführung'],
+  'Martian Robots': ['.NET 8', 'C#', 'Saubere Architektur', 'Command Pattern', 'Tests'],
+}
+
+const germanArchitectureCards: Record<string, { eyebrow: string; title: string; subtitle: string; items: string[] }> = {
+  frontend: { eyebrow: 'FRONTEND', title: 'React / Angular', subtitle: 'Benutzeroberfläche', items: ['Komponenten', 'Zustandsverwaltung', 'Benutzerinteraktion', 'Routing'] },
+  api: { eyebrow: '.NET / APIS', title: 'Sichere Services', subtitle: 'API-Gateway und Services', items: ['JWT-Authentifizierung', 'Autorisierung', 'Ratenbegrenzung', 'API-Endpunkte'] },
+  ai: { eyebrow: 'KI-WORKFLOWS', title: 'MCP + LLM', subtitle: 'Intelligente Orchestrierung', items: ['Intent-Erkennung', 'Workflow-Orchestrierung', 'Schutzmechanismen und Validierung', 'Antwortgenerierung'] },
+  domain: { eyebrow: 'DOMÄNENSERVICES', title: 'Geschäftslogik', subtitle: 'Unternehmensregeln', items: ['Validierung', 'Geschäftsregeln', 'Domänenmodelle', 'Richtliniendurchsetzung'] },
+  data: { eyebrow: 'AZURE + DATEN', title: 'Daten und Cloud', subtitle: 'Speicher, Messaging und Analysen', items: ['SQL-Datenbank', 'Cosmos DB', 'Service Bus / Events', 'Blob Storage / Dateien'] },
+}
 
 const systemStatuses = [
   '> request received from user',
@@ -19,6 +131,16 @@ const systemStatuses = [
   '> querying authorised data sources',
   '> generating analytics & insights',
   '> streaming response to client ...',
+]
+
+const germanSystemStatuses = [
+  '> Anfrage vom Benutzer empfangen',
+  '> JWT- und Mandantenkontext wird validiert  ✓',
+  '> KI-Workflow wird aufgerufen',
+  '> Schutzmechanismen und Sicherheitsprüfungen werden angewendet  ✓',
+  '> Berechtigte Datenquellen werden abgefragt',
+  '> Analysen und Erkenntnisse werden erzeugt',
+  '> Antwort wird an den Client gestreamt ...',
 ]
 
 type ArchitectureCard = { key: string; left: string; top: string; accent: string; glow: string; eyebrow: string; title: string; subtitle: string; Icon: LucideIcon; items: [LucideIcon, string][] }
@@ -32,9 +154,11 @@ const architectureCards: ArchitectureCard[] = [
 ]
 
 const requestFlow: [LucideIcon, string, string, string][] = [[User, 'User', 'Request', '#4da3ff'], [Lock, 'Auth', 'Validate', '#a06bff'], [Brain, 'AI', 'Process', '#f24fa0'], [Database, 'Data', 'Query', '#33d18f'], [TrendingUp, 'Response', 'Stream', '#4da3ff']]
+const germanRequestFlow: [LucideIcon, string, string, string][] = [[User, 'Benutzer', 'Anfrage', '#4da3ff'], [Lock, 'Auth', 'Validierung', '#a06bff'], [Brain, 'KI', 'Verarbeitung', '#f24fa0'], [Database, 'Daten', 'Abfrage', '#33d18f'], [TrendingUp, 'Antwort', 'Stream', '#4da3ff']]
 
-function ArchitectureCard({ card, activeSystem, setActiveSystem }: { card: ArchitectureCard; activeSystem: string; setActiveSystem: (key: string) => void }) {
+function ArchitectureCard({ card, activeSystem, setActiveSystem, language }: { card: ArchitectureCard; activeSystem: string; setActiveSystem: (key: string) => void; language: 'en' | 'de' }) {
   const Icon = card.Icon
+  const germanCard = germanArchitectureCards[card.key]
   return (
     <article
       className={`live-arch-card live-card-${card.key} ${activeSystem === card.key ? 'is-active' : ''}`}
@@ -43,10 +167,10 @@ function ArchitectureCard({ card, activeSystem, setActiveSystem }: { card: Archi
       onMouseLeave={() => setActiveSystem('ai')}
     >
       <div className="live-card-icon"><Icon size={22} strokeWidth={1.75} /></div>
-      <div className="live-card-eyebrow">{card.eyebrow}</div>
-      <h3>{card.title}</h3>
-      <p>{card.subtitle}</p>
-      <ul>{card.items.map(([ItemIcon, label]) => <li key={label}><ItemIcon size={14} strokeWidth={2} />{label}</li>)}</ul>
+      <div className="live-card-eyebrow">{language === 'de' && germanCard ? germanCard.eyebrow : card.eyebrow}</div>
+      <h3>{language === 'de' && germanCard ? germanCard.title : card.title}</h3>
+      <p>{language === 'de' && germanCard ? germanCard.subtitle : card.subtitle}</p>
+      <ul>{card.items.map(([ItemIcon, label], index) => <li key={label}><ItemIcon size={14} strokeWidth={2} />{language === 'de' && germanCard ? germanCard.items[index] : label}</li>)}</ul>
     </article>
   )
 }
@@ -58,6 +182,8 @@ function App() {
   const [expandedJobs, setExpandedJobs] = useState<Record<string, boolean>>({})
   const [activeSystem, setActiveSystem] = useState('ai')
   const [visibleLines, setVisibleLines] = useState(0)
+  const [language, setLanguage] = useState<'en' | 'de'>('en')
+  const text = copy[language]
 
   useEffect(() => {
     if (visibleLines >= systemStatuses.length) {
@@ -87,10 +213,13 @@ function App() {
 
           <div className="desktop-nav">
             {navItems.map((item) => (
-              <a href={`#${item}`} key={item}>{item === 'home' ? 'Home' : item[0].toUpperCase() + item.slice(1)}</a>
+              <a href={`#${item}`} key={item}>{text.nav[item as keyof typeof text.nav]}</a>
             ))}
+            <button type="button" className="language-toggle" onClick={() => setLanguage(language === 'en' ? 'de' : 'en')} aria-label="Switch language">
+              <Languages size={15} /> {language.toUpperCase()}
+            </button>
             <a className="button button-small" href={profile.cv} download>
-              <Download size={16} /> Download CV
+              <Download size={16} /> {text.download}
             </a>
           </div>
 
@@ -103,11 +232,14 @@ function App() {
           <div className="mobile-nav container">
             {navItems.map((item) => (
               <a href={`#${item}`} key={item} onClick={() => setOpen(false)}>
-                {item === 'home' ? 'Home' : item[0].toUpperCase() + item.slice(1)}
+                {text.nav[item as keyof typeof text.nav]}
               </a>
             ))}
+            <button type="button" className="language-toggle" onClick={() => setLanguage(language === 'en' ? 'de' : 'en')}>
+              <Languages size={15} /> {language.toUpperCase()}
+            </button>
             <a className="button" href={profile.cv} download onClick={() => setOpen(false)}>
-              <Download size={16} /> Download CV
+              <Download size={16} /> {text.download}
             </a>
           </div>
         )}
@@ -119,10 +251,10 @@ function App() {
             <div className="hero-visual hero-visual-architecture" aria-label="Living AI system architecture">
               <div className="visual-header">
                 <div className="visual-heading">
-                  <div className="visual-title">Live Architecture</div>
-                  <div className="visual-subtitle">How I think across the stack</div>
+                    <div className="visual-title">{text.liveArchitecture}</div>
+                      <div className="visual-subtitle">{text.stackSubtitle}</div>
                 </div>
-                <div className="visual-status-pill"><span className="console-dot" /> System Online</div>
+                <div className="visual-status-pill"><span className="console-dot" /> {text.systemOnline}</div>
               </div>
 
               <div className="live-architecture-diagram">
@@ -151,18 +283,18 @@ function App() {
                   ))}
                 </svg>
 
-                {architectureCards.slice(0, 4).map((card) => <ArchitectureCard key={card.key} card={card} activeSystem={activeSystem} setActiveSystem={setActiveSystem} />)}
+                {architectureCards.slice(0, 4).map((card) => <ArchitectureCard key={card.key} card={card} activeSystem={activeSystem} setActiveSystem={setActiveSystem} language={language} />)}
 
                 <div className={`live-core ${activeSystem === 'ai' ? 'is-active' : ''}`}>
                   <div className="live-core-ring" />
                   <div className="live-core-ring live-core-ring-alt" />
                   <Brain size={30} strokeWidth={1.6} color="#c9b7ff" />
-                  <strong>AI SYSTEM</strong>
-                  <small>Intelligence Core</small>
+                  <strong>{language === 'de' ? 'KI-SYSTEM' : 'AI SYSTEM'}</strong>
+                  <small>{language === 'de' ? 'Intelligenzkern' : 'Intelligence Core'}</small>
                   <span>LLM · MCP · NLQ</span>
                 </div>
 
-                <ArchitectureCard card={architectureCards[4]} activeSystem={activeSystem} setActiveSystem={setActiveSystem} />
+                <ArchitectureCard card={architectureCards[4]} activeSystem={activeSystem} setActiveSystem={setActiveSystem} language={language} />
               </div>
 
               <div className="architecture-diagram">
@@ -242,8 +374,8 @@ function App() {
                   <div className="arch-core-shell">
                     <div className="arch-core-ring" />
                     <span className="core-spark">✦</span>
-                    <h3>AI SYSTEM</h3>
-                    <small>Intelligence Core</small>
+                    <h3>{language === 'de' ? 'KI-SYSTEM' : 'AI SYSTEM'}</h3>
+                    <small>{language === 'de' ? 'Intelligenzkern' : 'Intelligence Core'}</small>
                     <span>LLM · MCP · NLQ</span>
                   </div>
                 </div>
@@ -299,12 +431,12 @@ function App() {
                   <div className="console-header-row">
                     <div className="console-header">
                       <span className="console-dot" />
-                      <span>System Status</span>
+                      <span>{text.systemStatus}</span>
                     </div>
                     <span className="console-live">LIVE</span>
                   </div>
                   <div className="console-body">
-                    {systemStatuses.slice(0, visibleLines).map((status, index) => (
+                    {(language === 'de' ? germanSystemStatuses : systemStatuses).slice(0, visibleLines).map((status, index) => (
                       <div key={status} className={`console-line console-line-${index % 3} ${index === visibleLines - 1 ? 'active' : ''}`}>
                         <span className="console-arrow">&gt;</span>{status.replace(/^>\s?/, '')}
                         {index === visibleLines - 1 && <span className="console-cursor" />}
@@ -314,9 +446,9 @@ function App() {
                 </div>
 
                 <div className="request-flow-panel">
-                  <div className="request-flow-header">Typical Request Flow</div>
+                  <div className="request-flow-header">{text.requestFlow}</div>
                   <div className="request-flow-steps">
-                    {requestFlow.map(([Icon, label, sub], index) => (
+                    {(language === 'de' ? germanRequestFlow : requestFlow).map(([Icon, label, sub], index) => (
                       <div className="flow-step" key={label} style={{ '--flow-delay': `${index * 0.58}s` } as CSSProperties}>
                         <span className={`flow-icon flow-icon-${index}`}><Icon size={16} /></span>
                         <small>{label}</small>
@@ -333,20 +465,12 @@ function App() {
         <section id="about" className="section">
           <div className="container two-col">
             <div>
-              <span className="section-label">About</span>
-              <h2>Full-stack ownership, from product problem to production.</h2>
+              <span className="section-label">{text.about}</span>
+              <h2>{text.aboutTitle}</h2>
             </div>
             <div className="prose-card">
-              <p>
-                I work across the complete engineering lifecycle—from problem understanding and architecture through implementation,
-                testing, deployment and production support. My role as a senior engineer is not simply to turn tickets into features,
-                but to understand the real business problem and translate it into a resilient system people can trust.
-              </p>
-              <p>
-                My recent work combines enterprise .NET engineering with production AI, real-time streaming, secure application integration,
-                optimisation and cloud delivery. I think carefully about service boundaries, authentication, authorisation, data ownership,
-                operational constraints and failure modes before choosing the technical solution.
-              </p>
+              <p>{text.aboutParagraphs[0]}</p>
+              <p>{text.aboutParagraphs[1]}</p>
               <div className="stats">
                 <div><strong>12+</strong><span>Years in software engineering</span></div>
                 <div><strong>Full Stack</strong><span>Frontend → Backend → Cloud</span></div>
@@ -358,13 +482,13 @@ function App() {
 
         <section id="experience" className="section section-alt">
           <div className="container">
-            <span className="section-label">Professional Experience</span>
-            <h2>Enterprise Software, Technical Leadership &amp; Modernisation</h2>
+            <span className="section-label">{text.experience}</span>
+            <h2>{text.experienceTitle}</h2>
             <p className="experience-intro">
-              My experience spans enterprise SaaS, fintech, cloud platforms, application modernisation, optimisation and production AI engineering.
+              {text.experienceIntro}
             </p>
             <p className="experience-intro">
-              Across these environments, my role has progressively expanded from implementing individual application features to owning problems across multiple layers of a system—understanding business requirements, designing solutions, building frontend and backend components, integrating services, supporting production systems and helping other engineers make effective technical decisions.
+              {text.experienceIntroTwo}
             </p>
 
             <div className="experience-story">
@@ -372,15 +496,16 @@ function App() {
                 const fullItems = job.sections.flatMap((section) =>
                   section.items ?? (section.paragraph ? [section.paragraph] : []),
                 )
-                const visibleItems = expandedJobs[job.company] ? fullItems : fullItems.slice(0, 3)
-                const isExpanded = Boolean(expandedJobs[job.company])
+                const germanPreview = germanExperiencePreview[job.company]
+                const visibleItems = language === 'de' && germanPreview ? germanPreview.highlights : (expandedJobs[job.company] ? fullItems : fullItems.slice(0, 3))
+                const isExpanded = language === 'en' && Boolean(expandedJobs[job.company])
 
                 return (
                   <article className="experience-entry" key={`${job.company}-${job.period}`}>
                     <h3 className="entry-company">{job.company}</h3>
-                    <h4 className="entry-role">{job.role}</h4>
-                    <p className="entry-period">{job.period}</p>
-                    {job.intro && <p className="entry-intro">{job.intro}</p>}
+                    <h4 className="entry-role">{language === 'de' && germanPreview ? germanPreview.role : job.role}</h4>
+                    <p className="entry-period">{language === 'de' && germanPreview ? germanPreview.period : job.period}</p>
+                    {job.intro && <p className="entry-intro">{language === 'de' && germanPreview ? germanPreview.intro : job.intro}</p>}
 
                     {isExpanded ? (
                       <div className="expanded-experience-block">
@@ -403,14 +528,14 @@ function App() {
                       </ul>
                     )}
 
-                    {fullItems.length > 3 && (
+                    {language === 'en' && fullItems.length > 3 && (
                       <button
                         type="button"
                         className="toggle-details"
                         onClick={() => toggleJob(job.company)}
                         aria-expanded={isExpanded}
                       >
-                        {isExpanded ? 'Show less' : 'Show more'}
+                        {isExpanded ? text.showLess : text.showMore}
                       </button>
                     )}
                   </article>
@@ -418,23 +543,21 @@ function App() {
               })}
 
               <div className="entry-section progression-block">
-                <h5>Career Progression</h5>
-                <p>
-                  My career has not simply been a progression through different frameworks. It has been a progression in engineering responsibility.
-                </p>
+                <h5>{text.progression}</h5>
+                <p>{text.progressionText}</p>
                 <div className="progression-steps" aria-label="Career progression">
-                  <div>Full-Stack Engineering<br /><span>.NET · Angular · APIs · Financial Platforms</span></div>
-                  <div>Integration &amp; Architecture<br /><span>Authentication · External APIs · Cloud Integration · SOLID</span></div>
-                  <div>Modernisation &amp; Cloud<br /><span>React · Azure Functions · CI/CD · Infrastructure as Code · Observability</span></div>
-                  <div>Distributed Systems<br /><span>Angular Architecture · Messaging · Multi-Cloud · Backend Integration</span></div>
-                  <div>Technical Leadership<br /><span>Architecture · Team Leadership · TDD · Azure · Stakeholders · Production Ownership</span></div>
-                  <div>Advanced Enterprise Engineering<br /><span>Production AI · MCP · Real-Time Streaming · Secure AI Integration · Natural-Language Analytics · Constraint Optimisation</span></div>
+                  <div>{language === 'de' ? 'Full-Stack-Entwicklung' : 'Full-Stack Engineering'}<br /><span>.NET · Angular · APIs · Finanzplattformen</span></div>
+                  <div>{language === 'de' ? 'Integration und Architektur' : 'Integration & Architecture'}<br /><span>Authentifizierung · Externe APIs · Cloud-Integration · SOLID</span></div>
+                  <div>{language === 'de' ? 'Modernisierung und Cloud' : 'Modernisation & Cloud'}<br /><span>React · Azure Functions · CI/CD · Infrastructure as Code · Observability</span></div>
+                  <div>{language === 'de' ? 'Verteilte Systeme' : 'Distributed Systems'}<br /><span>Angular-Architektur · Messaging · Multi-Cloud · Backend-Integration</span></div>
+                  <div>{language === 'de' ? 'Technische Führung' : 'Technical Leadership'}<br /><span>Architektur · Teamführung · TDD · Azure · Stakeholder · Produktionsverantwortung</span></div>
+                  <div>{language === 'de' ? 'Fortgeschrittene Enterprise-Entwicklung' : 'Advanced Enterprise Engineering'}<br /><span>Produktive KI · MCP · Echtzeit-Streaming · Sichere KI-Integration · Natürlichsprachliche Analytik · Constraint-Optimierung</span></div>
                 </div>
                 <p>
-                  Today, that experience allows me to move comfortably between detailed implementation and higher-level engineering questions. I can discuss a React state-management problem, investigate a .NET API, reason about SQL behaviour, design communication between distributed services, review an authentication boundary, model an optimisation constraint or discuss how an AI workflow should be controlled.
+                  {language === 'de' ? 'Heute kann ich mich sicher zwischen detaillierter Implementierung und übergeordneten Engineering-Fragen bewegen. Ich kann ein React-Problem bei der Zustandsverwaltung besprechen, eine .NET-API untersuchen, SQL-Verhalten analysieren, die Kommunikation verteilter Services entwerfen, eine Authentifizierungsgrenze prüfen, eine Optimierungsbedingung modellieren oder die Steuerung eines KI-Workflows diskutieren.' : 'Today, that experience allows me to move comfortably between detailed implementation and higher-level engineering questions. I can discuss a React state-management problem, investigate a .NET API, reason about SQL behaviour, design communication between distributed services, review an authentication boundary, model an optimisation constraint or discuss how an AI workflow should be controlled.'}
                 </p>
                 <p>
-                  But the technology itself is not the end goal. The goal is to build software that solves the business problem, works reliably in production, remains understandable to the engineering team and can continue evolving as the product changes.
+                  {language === 'de' ? 'Die Technologie selbst ist jedoch nicht das Ziel. Das Ziel ist Software, die das Geschäftsproblem löst, zuverlässig im Betrieb funktioniert, für das Engineering-Team verständlich bleibt und sich mit dem Produkt weiterentwickeln kann.' : 'But the technology itself is not the end goal. The goal is to build software that solves the business problem, works reliably in production, remains understandable to the engineering team and can continue evolving as the product changes.'}
                 </p>
               </div>
             </div>
@@ -443,12 +566,12 @@ function App() {
 
         <section id="skills" className="section">
           <div className="container">
-            <span className="section-label">Technical Skills</span>
-            <h2>Strong Microsoft engineering foundation with modern AI and cloud capability.</h2>
+            <span className="section-label">{text.skills}</span>
+            <h2>{text.skillsTitle}</h2>
             <div className="skill-grid">
               {skillGroups.map((group) => (
                 <article className="skill-card" key={group.title}>
-                  <h3>{group.title}</h3>
+                  <h3>{language === 'de' ? ({ 'Backend & APIs': 'Backend & APIs', 'AI & Intelligent Systems': 'KI & intelligente Systeme', Frontend: 'Frontend', 'Cloud & DevOps': 'Cloud & DevOps', Data: 'Daten', 'Architecture & Engineering': 'Architektur & Engineering' }[group.title] ?? group.title) : group.title}</h3>
                   <div className="chip-row">
                     {group.items.map((item) => <span className="chip" key={item}>{item}</span>)}
                   </div>
@@ -460,16 +583,16 @@ function App() {
 
         <section id="projects" className="section section-alt">
           <div className="container">
-            <span className="section-label">Featured Work</span>
-            <h2>Selected engineering problems and systems.</h2>
+            <span className="section-label">{text.projects}</span>
+            <h2>{text.projectsTitle}</h2>
             <div className="project-grid">
               {projects.map((project) => (
                 <article className="project-card" key={project.title}>
-                  <span className="eyebrow">{project.eyebrow}</span>
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
+                  <span className="eyebrow">{language === 'de' ? germanProjects[project.title]?.eyebrow ?? project.eyebrow : project.eyebrow}</span>
+                  <h3>{language === 'de' ? germanProjects[project.title]?.title ?? project.title : project.title}</h3>
+                  <p>{language === 'de' ? germanProjects[project.title]?.description ?? project.description : project.description}</p>
                   <div className="chip-row">
-                    {project.highlights.map((item) => <span className="chip" key={item}>{item}</span>)}
+                    {(language === 'de' ? germanProjectHighlights[project.title] ?? project.highlights : project.highlights).map((item) => <span className="chip" key={item}>{item}</span>)}
                   </div>
                   {project.link && (
                     <a className="text-link" href={project.link} target="_blank" rel="noreferrer">
@@ -485,54 +608,42 @@ function App() {
         <section id="architecture" className="section">
           <div className="container architecture-grid">
             <div>
-              <span className="section-label">Architecture</span>
-              <h2>I design beyond the UI.</h2>
-              <p className="lead">
-                My work spans browser clients, secure .NET APIs, distributed services, cloud infrastructure,
-                AI workflows, data platforms and production operations.
-              </p>
+              <span className="section-label">{text.architecture}</span>
+              <h2>{text.architectureTitle}</h2>
+              <p className="lead">{text.architectureLead}</p>
               <div className="principles">
-                <div><ShieldCheck /><span><strong>Secure by design</strong><small>JWT validation, scope enforcement, guardrails</small></span></div>
-                <div><Users /><span><strong>Team engineering</strong><small>Reviews, mentoring, technical decisions</small></span></div>
-                <div><Database /><span><strong>Data aware</strong><small>SQL Server, analytics, safe data access</small></span></div>
+                {text.principles.map(([title, description], index) => <div key={title}>{index === 0 ? <ShieldCheck /> : index === 1 ? <Users /> : <Database />}<span><strong>{title}</strong><small>{description}</small></span></div>)}
               </div>
             </div>
 
             <div className="architecture-map">
               <div className="arch-node">React / Angular</div>
               <div className="arch-line">↓</div>
-              <div className="arch-node">ASP.NET Core API Gateway</div>
+              <div className="arch-node">{language === 'de' ? 'ASP.NET Core API-Gateway' : 'ASP.NET Core API Gateway'}</div>
               <div className="arch-line">↓</div>
               <div className="arch-split">
-                <div className="arch-node">Domain Services</div>
-                <div className="arch-node">MCP / AI Workflows</div>
+                <div className="arch-node">{language === 'de' ? 'Domänendienste' : 'Domain Services'}</div>
+                <div className="arch-node">{language === 'de' ? 'MCP / KI-Workflows' : 'MCP / AI Workflows'}</div>
               </div>
               <div className="arch-line">↓</div>
               <div className="arch-split">
-                <div className="arch-node">SQL / Analytics</div>
-                <div className="arch-node">Azure Services</div>
+                <div className="arch-node">{language === 'de' ? 'SQL / Analysen' : 'SQL / Analytics'}</div>
+                <div className="arch-node">Azure-Services</div>
               </div>
-              <div className="arch-foot">Authentication · Validation · Monitoring · Logging · CI/CD</div>
+              <div className="arch-foot">{language === 'de' ? 'Authentifizierung · Validierung · Überwachung · Protokollierung · CI/CD' : 'Authentication · Validation · Monitoring · Logging · CI/CD'}</div>
             </div>
           </div>
         </section>
 
         <section className="section philosophy">
           <div className="container">
-            <span className="section-label">Engineering Philosophy</span>
-            <h2>How I Build Software</h2>
+            <span className="section-label">{text.philosophy}</span>
+            <h2>{text.philosophyTitle}</h2>
             <div className="philosophy-grid">
-              {[
-                ['Business First', 'Understand the actual problem before selecting technology.'],
-                ['Keep It Simple', 'Prefer maintainable solutions and avoid unnecessary complexity.'],
-                ['Quality by Design', 'Use automated testing, code reviews, observability and clear architecture.'],
-                ['Design for Change', 'Build systems that can evolve as business requirements change.'],
-                ['Ownership', 'Take responsibility from requirement discovery through production support.'],
-                ['Team Engineering', 'Share knowledge, mentor developers and improve engineering practices.'],
-              ].map(([title, text]) => (
+              {text.philosophyItems.map(([title, description]) => (
                 <article key={title}>
                   <h3>{title}</h3>
-                  <p>{text}</p>
+                  <p>{description}</p>
                 </article>
               ))}
             </div>
@@ -541,13 +652,13 @@ function App() {
 
         <section className="section section-alt">
           <div className="container">
-            <span className="section-label">Career Statistics</span>
-            <h2>Senior engineering depth across software, architecture and cloud delivery.</h2>
+            <span className="section-label">{text.statistics}</span>
+            <h2>{text.statisticsTitle}</h2>
             <div className="stats career-stats">
-              <div><strong>12+</strong><span>Years in software engineering</span></div>
-              <div><strong>9+</strong><span>Years in C# / .NET</span></div>
-              <div><strong>Full Stack</strong><span>Frontend → Backend → Cloud</span></div>
-              <div><strong>Cloud</strong><span>Azure & modern DevOps</span></div>
+              <div><strong>12+</strong><span>{text.statsLabels[0]}</span></div>
+              <div><strong>9+</strong><span>{text.statsLabels[1]}</span></div>
+              <div><strong>{language === 'de' ? 'Full Stack' : 'Full Stack'}</strong><span>{text.statsLabels[2]}</span></div>
+              <div><strong>Cloud</strong><span>{text.statsLabels[3]}</span></div>
             </div>
           </div>
         </section>
@@ -555,26 +666,23 @@ function App() {
         <section id="contact" className="section contact-section">
           <div className="container contact-card">
             <div>
-              <span className="section-label">Contact</span>
-              <h2>Let’s build something meaningful.</h2>
-              <p>
-                I’m interested in senior full-stack and technical leadership opportunities where I can contribute
-                to challenging products, architecture and engineering teams.
-              </p>
+              <span className="section-label">{text.contact}</span>
+              <h2>{text.contactTitle}</h2>
+              <p>{text.contactText}</p>
               <p className="location"><MapPin size={17} /> {profile.location}</p>
             </div>
             <div className="contact-actions">
-              <a className="button" href={`mailto:${profile.email}`}><Mail size={18} /> Email me</a>
+              <a className="button" href={`mailto:${profile.email}`}><Mail size={18} /> {text.email}</a>
               <a
                 className="button button-ghost phone-toggle"
                 href={showPhone ? `tel:${profile.phone}` : '#contact'}
                 onClick={() => setShowPhone((current) => !current)}
               >
-                <Phone size={18} /> {showPhone ? profile.phone : 'Call me'}
+                <Phone size={18} /> {showPhone ? profile.phone : text.call}
               </a>
               <a className="button button-ghost" href={profile.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub</a>
               <a className="button button-ghost" href={profile.linkedin} target="_blank" rel="noreferrer"><Linkedin size={18} /> LinkedIn</a>
-              <a className="button button-ghost" href={profile.cv} download><Download size={18} /> Download CV</a>
+              <a className="button button-ghost" href={profile.cv} download><Download size={18} /> {text.download}</a>
             </div>
           </div>
         </section>
@@ -593,7 +701,7 @@ function App() {
 
       <footer>
         <div className="container footer-inner">
-          <span>© 2026 {profile.name}. All rights reserved.</span>
+          <span>© 2026 {profile.name}. {language === 'de' ? 'Alle Rechte vorbehalten.' : 'All rights reserved.'}</span>
           <div className="footer-links" aria-label="Social links">
             <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
             <span>•</span>
@@ -601,7 +709,7 @@ function App() {
             <span>•</span>
             <a href={`mailto:${profile.email}`}>Email</a>
           </div>
-          <span>Built with modern web technologies and hosted on GitHub Pages.</span>
+          <span>{language === 'de' ? 'Mit modernen Webtechnologien entwickelt und auf GitHub Pages gehostet.' : 'Built with modern web technologies and hosted on GitHub Pages.'}</span>
         </div>
       </footer>
     </div>

@@ -140,6 +140,28 @@ button, a { -webkit-tap-highlight-color: transparent; }
   font-size: 14px;
 }
 
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+  color: #dceeff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+
+.language-toggle:hover {
+  border-color: rgba(102, 217, 255, .55);
+  color: white;
+}
+
 .desktop-nav > a:not(.button):hover { color: white; }
 
 .menu-button {
@@ -152,6 +174,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .mobile-nav {
   display: none;
+}
+
+.mobile-nav .language-toggle {
+  justify-content: center;
+  width: 100%;
+  margin: 6px 0;
 }
 
 .hero {
@@ -1214,8 +1242,8 @@ h3 {
 .contact-card p { color: var(--muted); max-width: 720px; line-height: 1.7; }
 .contact-actions { display: grid; gap: 10px; }
 .phone-toggle {
-  min-width: 182px;
-  width: 182px;
+  width: 100%;
+  min-width: 0;
   justify-content: center;
   white-space: nowrap;
 }
@@ -1238,10 +1266,6 @@ footer {
   .menu-button { display: inline-grid; }
   .contact-card { grid-template-columns: 1fr; }
   .contact-actions { width: 100%; }
-  .phone-toggle {
-    width: 100%;
-    min-width: 0;
-  }
   .mobile-nav {
     display: grid;
     gap: 4px;
